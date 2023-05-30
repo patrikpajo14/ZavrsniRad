@@ -9,6 +9,8 @@ const AuthSocialButton = ({ icon, onClick }) => {
         inline-flex
         w-full 
         justify-center 
+        items-center
+        gap-2
         rounded-md 
         bg-white 
         px-4 
@@ -22,7 +24,8 @@ const AuthSocialButton = ({ icon, onClick }) => {
         focus:outline-offset-0
       "
     >
-      <Image src={icon} width="25" height="25" alt="provider" />
+      Continue with
+      <Image src={icon} width="20" height="20" alt="provider" />
     </button>
   );
 };

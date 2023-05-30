@@ -1,10 +1,20 @@
+import Button from "@/components/Button";
+import PageSubheader from "@/components/PageSubheader";
 import React from "react";
 
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard page</h1>
-    </div>
+    <section>
+      <PageSubheader
+        title={"Dashboard"}
+        body={
+          <div className="flex gap-4 items-center">
+            <Button secondary={true}>New article</Button>
+            <Button>New offer</Button>
+          </div>
+        }
+      />
+    </section>
   );
 };
 

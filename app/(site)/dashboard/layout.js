@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <>
       <Sidebar />
-      <section className="container">
+      <section className="container-fluid">
         <Nav />
         {children}
       </section>

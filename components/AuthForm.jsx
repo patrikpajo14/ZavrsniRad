@@ -10,7 +10,6 @@ import Input from "/components/Input";
 import AuthSocialButton from "/components/AuthSocialButton";
 import Button from "/components/Button";
 import { toast } from "react-hot-toast";
-import Image from "next/image";
 
 const AuthForm = () => {
   const session = useSession();
@@ -63,6 +62,7 @@ const AuthForm = () => {
           }
 
           if (callback?.ok) {
+            toast.success("User has been registered");
             router.push("/dashboard");
           }
         })
@@ -77,10 +77,11 @@ const AuthForm = () => {
       })
         .then((callback) => {
           if (callback?.error) {
-            toast.error("Invalid credentials!");
+            toast.error(callback.error);
           }
 
-          if (callback?.ok) {
+          if (callback?.ok && !callback?.error) {
+            toast.success("Logged in successfully!");
             router.push("/dashboard");
           }
         })
@@ -94,10 +95,11 @@ const AuthForm = () => {
     signIn("google", { redirect: false })
       .then((callback) => {
         if (callback?.error) {
-          toast.error("Invalid credentials!");
+          toast.error(callback.error);
         }
 
         if (callback?.ok) {
+          toast.success("Logged in successfully!");
           router.push("/dashboard");
         }
       })
@@ -105,7 +107,12 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="mt-5 w-full">
+    <div className="w-full">
+      <h1 className="text-2xl font-bold mb-5">
+        {variant === "LOGIN"
+          ? "Login with your Account"
+          : "Create your account"}
+      </h1>
       <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
         {variant === "REGISTER" && (
           <Input
@@ -161,18 +168,18 @@ const AuthForm = () => {
           />
         </div>
       </div>
-      <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-        <div>
+      <div className="text-sm mt-6 px-2 text-gray-500">
+        <p>
           {variant === "LOGIN"
-            ? "You don't have account?"
-            : "Already have an account?"}
-        </div>
-        <div
-          onClick={toggleVariant}
-          className="underline cursor-pointer text-primary-red"
-        >
-          {variant === "LOGIN" ? "Create an account" : "Login"}
-        </div>
+            ? "You don't have account? "
+            : "Already have an account? "}
+          <button
+            onClick={toggleVariant}
+            className="cursor-pointer text-primary-red hover:underline"
+          >
+            {variant === "LOGIN" ? " Create account" : " Login"}
+          </button>
+        </p>
       </div>
     </div>
   );

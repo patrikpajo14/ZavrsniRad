@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 const Input = ({
   label,
@@ -16,7 +15,8 @@ const Input = ({
         htmlFor={id}
         className="
             block 
-            text-[16px] 
+            sm:text-[16px] 
+            text-sm
             font-medium 
             text-gray-900
           "
@@ -35,8 +35,10 @@ const Input = ({
               block 
               w-full 
               rounded-[5px] 
-              py-[10px]
-              px-[15px]
+              py-[7px]
+              px-[12px]
+              sm:py-[10px]
+              sm:px-[15px]
               text-black
               border-1
               border
@@ -46,7 +48,8 @@ const Input = ({
               focus:bg-white
               focus:outline-none
               focus:ring-transparent
-              sm:text-sm 
+              text-sm
+              sm:text-md 
             `,
             errors[id] && "border-primary-red focus:border-primary-red",
             disabled && "opacity-50 cursor-default"

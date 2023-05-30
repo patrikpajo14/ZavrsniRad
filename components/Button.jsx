@@ -9,6 +9,7 @@ const Button = ({
   onClick,
   secondary,
   disabled,
+  sx,
 }) => {
   return (
     <button
@@ -16,6 +17,7 @@ const Button = ({
       type={type}
       disabled={disabled}
       className={clsx(
+        sx,
         disabled && "opacity-50 cursor-default",
         fullWidth && "w-full",
         secondary ? "outline_btn" : "primary_btn",
