@@ -32,7 +32,7 @@ const Article = () => {
         </div>
         <div className="flex gap-3 justify-between  sm:justify-end lg:justify-center w-[100%] sm:w-[50%] lg:w-auto lg:flex-col text-sm md:text-[16px]">
           <Button>Delete</Button>
-          <Button secondary={true}>Edit</Button>
+          <Button secondary={true}>Edit button</Button>
         </div>
       </div>
     </div>
