@@ -1,5 +1,5 @@
 import React from "react";
-import OffersForm from "./components/OffersForm";
+import OffersForm from "../components/OffersForm";
 import PageSubheader from "@/components/PageSubheader";
 import Article from "@/components/Article";
 
