@@ -15,13 +15,13 @@ const Article = () => {
         />
       </div>
       <div className="p-[15px] md:p-[20px] flex-1 flex gap-3 justify-between flex-wrap lg:flex-nowrap">
-        <div className="w-[100%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:block text-sm md:text-[16px]">
+        <div className="w-[100%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:flex-col text-sm md:text-[16px]">
           <p>artcile: single window</p>
           <p>amount: 1</p>
           <p>dimensions: 100x200</p>
           <p>opening: right</p>
         </div>
-        <div className="w-[100%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:block text-sm md:text-[16px]">
+        <div className="w-[100%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:flex-col text-sm md:text-[16px]">
           <p>color: white</p>
           <p>mosquito nets: yes</p>
           <p>sub stock: no</p>

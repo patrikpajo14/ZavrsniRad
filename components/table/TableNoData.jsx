@@ -3,7 +3,9 @@ export default function TableNoData({ isNotFound, title }) {
     <tr>
       {isNotFound ? (
         <td colSpan={12}>
-          <p className="h-[160px]">{title ? title : "No Data"}</p>
+          <p className="flex items-center justify-center h-[160px] text-lg font-semibold">
+            {title ? title : "No Data In Table"}
+          </p>
         </td>
       ) : (
         <td colSpan={12} style={{ padding: 0 }} />

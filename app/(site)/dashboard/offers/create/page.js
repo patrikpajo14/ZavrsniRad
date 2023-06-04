@@ -10,7 +10,7 @@ const CreateOffer = () => {
 
       <OffersForm />
 
-      <div className="mt-[20px] py-[10px] mx-[-15px] px-[15px] overflow-y-scroll max-h-[70vh] md:max-h-[40vh] xl:max-h-[50vh]">
+      <div className="mt-[20px] py-[10px] mx-[-15px] px-[15px]">
         <Article />
         <Article />
         <Article />

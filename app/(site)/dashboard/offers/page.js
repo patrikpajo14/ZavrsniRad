@@ -1,5 +1,5 @@
-import Button from "@/components/Button";
 import PageSubheader from "@/components/PageSubheader";
+import { OffersTable } from "@/components/offers";
 import Link from "next/link";
 import React from "react";
 
@@ -14,6 +14,8 @@ const Offers = () => {
           </Link>
         }
       />
+
+      <OffersTable />
     </section>
   );
 };

@@ -9,7 +9,8 @@
 */
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 7px;
+  height: 7px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
@@ -142,6 +143,18 @@ body.sidebar-open .sidebar {
 
 .search_input {
   @apply block w-full rounded-md border border-gray-200 bg-white py-2.5 font-satoshi pl-5 pr-12 text-sm shadow-lg font-medium focus:border-black focus:outline-none focus:ring-0;
+}
+
+table {
+  @apply table w-[100%] border-collapse border-spacing-0 min-w-[680px];
+}
+
+th {
+  @apply border-b-[1px] border-gray-100 p-4 text-sm text-gray-800 font-semibold bg-gray-100;
+}
+
+td {
+  @apply border-b-[1px] border-gray-100 p-4 text-sm;
 }
 
 /* Form Component */
