@@ -100,7 +100,7 @@ body.sidebar-open .sidebar {
 /* Tailwind Styles */
 
 .sidebar {
-  @apply absolute transition-all left-[-100%] z-50 h-[100%] md:relative md:left-0 w-[100%] md:w-[60px] md:h-[auto] shadow-main bg-primary-lightred xl:w-[300px];
+  @apply absolute transition-all left-[-100%] z-50 md:z-0 h-[100%] md:relative md:left-0 w-[100%] md:w-[60px] md:h-[auto] shadow-main bg-primary-lightred xl:w-[300px];
 }
 
 .sidebar-link {
@@ -127,6 +127,10 @@ body.sidebar-open .sidebar {
 
 .outline_btn {
   @apply rounded-[10px] border border-primary-red bg-transparent text-[14px] py-[7px] px-[12px] md:py-[10px] md:px-5  text-primary-red font-bold transition-all hover:bg-primary-red hover:text-white text-center md:text-[16px] font-inter;
+}
+
+.iconButton {
+  @apply inline-flex items-center justify-center relative box-border bg-transparent border-[0] align-middle appearance-none text-center text-2xl p-2 rounded-full overflow-visible text-blue-600/50 transition hover:bg-black/[0.04];
 }
 
 .avatar {

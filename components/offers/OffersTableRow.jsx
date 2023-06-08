@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "@/components/Button";
+import ConfirmDialog from "../ConfirmDialog";
+import IconButton from "../IconButton";
+import Image from "next/image";
 
 export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
   const { id, customerName, date, address, price, status } = row;
@@ -41,9 +44,30 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
 
         <td align="left">{price}</td>
 
-        <td align="right">edit delete</td>
+        <td align="right">
+          <IconButton onClick={onEditRow}>
+            <Image
+              src="/assets/icons/ico_edit.svg"
+              alt="edit"
+              width={20}
+              height={20}
+            />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              setOpenConfirm(true);
+            }}
+          >
+            <Image
+              src="/assets/icons/ico_delete.svg"
+              alt="delete"
+              width={20}
+              height={20}
+            />
+          </IconButton>
+        </td>
       </tr>
-      {/*       <ConfirmDialog
+      <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
         title="Izbriši"
@@ -53,7 +77,7 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
             Izbriši
           </Button>
         }
-      /> */}
+      />
     </>
   );
 }

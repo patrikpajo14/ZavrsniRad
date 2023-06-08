@@ -71,12 +71,6 @@ export default function OffersTable() {
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
     setTableData(deleteRow);
-
-    if (page > 0) {
-      if (tableData.length < 2) {
-        setPage(page - 1);
-      }
-    }
   };
 
   const handleEditRow = (id) => {
