@@ -65,19 +65,20 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
               height={20}
             />
           </IconButton>
+
+          <ConfirmDialog
+            open={openConfirm}
+            onClose={handleCloseConfirm}
+            title="Izbriši"
+            content="Jeste li sigurni da želite obrisati?"
+            action={
+              <Button variant="contained" color="error" onClick={onDeleteRow}>
+                Izbriši
+              </Button>
+            }
+          />
         </td>
       </tr>
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Izbriši"
-        content="Jeste li sigurni da želite obrisati?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Izbriši
-          </Button>
-        }
-      />
     </>
   );
 }

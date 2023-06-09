@@ -10,13 +10,7 @@ const CreateOffer = () => {
 
       <OffersForm />
 
-      <div className="mt-[20px] py-[10px] mx-[-15px] px-[15px]">
-        <Article />
-        <Article />
-        <Article />
-        <Article />
-        <Article />
-      </div>
+      <div className="mt-[20px] py-[10px] mx-[-15px] px-[15px]"></div>
     </section>
   );
 };
