@@ -14,16 +14,16 @@ const Input = ({
       <label
         htmlFor={id}
         className="
-            block 
-            sm:text-[16px] 
+            block
+            sm:text-[16px]
             text-sm
-            font-medium 
+            font-medium
             text-gray-900
           "
       >
         {label}
       </label>
-      <div className="mt-[5px]">
+      <div className="relative mt-[5px]">
         <input
           id={id}
           type={type}
@@ -55,6 +55,11 @@ const Input = ({
             disabled && "opacity-50 cursor-default"
           )}
         />
+          {errors && (
+              <label htmlFor={id} className={clsx(
+                  "absolute top-[100%] right-0 text-primary-red text-sm"
+              )}>{errors[id]?.message}</label>
+          )}
       </div>
     </div>
   );

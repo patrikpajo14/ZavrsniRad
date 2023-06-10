@@ -4,8 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-  Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
+/*
+  Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them!
 */
 
 ::-webkit-scrollbar {
@@ -69,6 +69,13 @@ body.sidebar-open .sidebar {
   right: 0;
   bottom: 0;
   background: url(/assets/images/background.jpg) center/cover no-repeat;
+}
+
+.checkbox:checked {
+  border: none;
+}
+.checkbox:checked + .check-icon {
+  display: flex;
 }
 
 @media screen and (max-width: 1280px) {

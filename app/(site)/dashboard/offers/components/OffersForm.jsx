@@ -2,12 +2,12 @@
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Input from "@/components/forms/Input";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import Select from "@/components/Select";
+import Select from "@/components/forms/Select";
 import FormProvider from "@/components/forms/FormProvider";
 import { toast } from "react-hot-toast";
 
@@ -66,6 +66,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   return (

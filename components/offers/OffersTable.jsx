@@ -77,6 +77,10 @@ export default function OffersTable() {
     push(`/dashboard/offers/${id}`);
   };
 
+  const handleViewRow = (id) => {
+    push(`/dashboard/offers/${id}/view`);
+  };
+
   return (
     <div className="card">
       <div className="p-4">
@@ -93,9 +97,10 @@ export default function OffersTable() {
                 row={row}
                 onDeleteRow={() => handleDeleteRow(row.id)}
                 onEditRow={() => handleEditRow(row.id)}
+                onViewRow={() => handleViewRow(row.id)}
               />
             ))}
-            {/* 
+            {/*
             <TableEmptyRows height={60} emptyRows={tableData.length} /> */}
 
             <TableNoData isNotFound={tableData.length < 1} />

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-import Input from "/components/Input";
+import Input from "/components/forms/Input";
 import AuthSocialButton from "/components/AuthSocialButton";
 import Button from "/components/Button";
 import { toast } from "react-hot-toast";

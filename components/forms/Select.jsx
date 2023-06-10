@@ -3,17 +3,17 @@
 import clsx from "clsx";
 import { useState } from "react";
 
-const Select = ({ label, options, disabled, name, placeholder }) => {
+const Select = ({ label, children, disabled, name, placeholder }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
   return (
     <div className="z-[100]">
       <label
         className="
-        block 
-        sm:text-[16px] 
-        text-sm
-        font-medium 
+        block
+        sm:text-[16px]
+        text-xs
+        font-medium
         text-gray-900
       "
       >
@@ -53,11 +53,7 @@ const Select = ({ label, options, disabled, name, placeholder }) => {
           <option value="" disabled>
             {placeholder}
           </option>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
+            {children}
         </select>
       </div>
     </div>

@@ -4,7 +4,7 @@ import ConfirmDialog from "../ConfirmDialog";
 import IconButton from "../IconButton";
 import Image from "next/image";
 
-export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
+export default function OffersTableRow({ row, onDeleteRow, onEditRow, onViewRow }) {
   const { id, customerName, date, address, price, status } = row;
   const [openConfirm, setOpenConfirm] = useState(false);
   const [color, setColor] = useState("green");
@@ -19,7 +19,7 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow }) {
 
   return (
     <>
-      <tr>
+      <tr onClick={onViewRow} className="cursor-pointer">
         <td align="left">{id}</td>
 
         <td align="left" style={{ minWidth: "160px" }}>
