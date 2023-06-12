@@ -2,6 +2,9 @@
 
 import React from 'react';
 import {useParams} from "next/navigation";
+import PageSubheader from "@/components/PageSubheader";
+import OffersForm from "@/app/(site)/dashboard/offers/components/OffersForm";
+import ArticleLIst from "@/components/article/ArticleLIst";
 
 const OfferView = () => {
     const params = useParams();
@@ -60,9 +63,11 @@ const OfferView = () => {
 
     const filteredOffer = _offersList.find(offer => {return offer.id === params.id})
     return (
-        <div>
-            <h1>{filteredOffer.customerName}</h1>
-        </div>
+        <section className="max-h-[calc(100vh - 50px)]">
+            <PageSubheader title={"Edit offer"} />
+
+            {filteredOffer.name}
+        </section>
     );
 };
 

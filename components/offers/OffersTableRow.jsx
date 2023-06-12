@@ -19,7 +19,7 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow, onViewRow 
 
   return (
     <>
-      <tr onClick={onViewRow} className="cursor-pointer">
+      <tr>
         <td align="left">{id}</td>
 
         <td align="left" style={{ minWidth: "160px" }}>
@@ -51,6 +51,14 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow, onViewRow 
               alt="edit"
               width={20}
               height={20}
+            />
+          </IconButton>
+          <IconButton onClick={onViewRow}>
+            <Image
+                src="/assets/icons/ico_eye.svg"
+                alt="view"
+                width={20}
+                height={20}
             />
           </IconButton>
           <IconButton
