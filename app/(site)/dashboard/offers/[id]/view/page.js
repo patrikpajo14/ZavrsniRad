@@ -5,6 +5,8 @@ import {useParams} from "next/navigation";
 import PageSubheader from "@/components/PageSubheader";
 import OffersForm from "@/app/(site)/dashboard/offers/components/OffersForm";
 import ArticleLIst from "@/components/article/ArticleLIst";
+import Link from "next/link";
+import Button from "@/components/Button";
 
 const OfferView = () => {
     const params = useParams();
@@ -18,6 +20,36 @@ const OfferView = () => {
             email:"test@gmail.com",
             phone: "095666777",
             price: 2000,
+            articles: [
+                {
+                    id: 1,
+                    name: "Single window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 2000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 200
+                },
+                {
+                    id: 2,
+                    name: "Doors",
+                    type_id: 1,
+                    amount: 1,
+                    width: 1000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 700
+                },
+            ]
         },
         {
             id: "2",
@@ -28,6 +60,22 @@ const OfferView = () => {
             email:"test@gmail.com",
             phone: "095666777",
             price: 2000,
+            articles: [
+                {
+                    id: 1,
+                    name: "Single window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 2000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 200
+                },
+            ]
         },
         {
             id: "3",
@@ -38,6 +86,50 @@ const OfferView = () => {
             email:"test@gmail.com",
             phone: "095666777",
             price: 2000,
+            articles: [
+                {
+                    id: 1,
+                    name: "Single window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 2000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 200
+                },
+                {
+                    id: 2,
+                    name: "Doors",
+                    type_id: 1,
+                    amount: 1,
+                    width: 1000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 700
+                },
+                {
+                    id: 3,
+                    name: "Double window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 4000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 1,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 600
+                }
+            ]
         },
         {
             id: "4",
@@ -48,6 +140,36 @@ const OfferView = () => {
             email:"test@gmail.com",
             phone: "095666777",
             price: 2000,
+            articles: [
+                {
+                    id: 1,
+                    name: "Single window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 2000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 200
+                },
+                {
+                    id: 2,
+                    name: "Doors",
+                    type_id: 1,
+                    amount: 1,
+                    width: 1000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 0,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 700
+                },
+            ]
         },
         {
             id: "5",
@@ -58,15 +180,62 @@ const OfferView = () => {
             email:"test@gmail.com",
             phone: "095666777",
             price: 2000,
+            articles: [
+                {
+                    id: 3,
+                    name: "Double window",
+                    type_id: 1,
+                    amount: 1,
+                    width: 4000,
+                    height: 2000,
+                    color_id: 1,
+                    opening: "right",
+                    substock: 1,
+                    blinds_id: 0,
+                    extras_id: 0,
+                    price: 600
+                }
+            ]
         },
     ];
 
     const filteredOffer = _offersList.find(offer => {return offer.id === params.id})
+
     return (
         <section className="max-h-[calc(100vh - 50px)]">
-            <PageSubheader title={"Edit offer"} />
+            <PageSubheader
+                title={`Edit offer ${params.id}`}
+                body={
+                <div className="flex gap-4 items-center">
+                    <div>
+                        <p>13.06.2023</p>
+                    </div>
+                    <Button
+                        secondary
+                        href={`/dashboard/offers/${params.id}`}
+                        className="outline_btn"
+                    >
+                        Edit offer
+                    </Button>
+                    <Link href={"/dashboard/offers/create"} className="primary_btn">
+                        New offer
+                    </Link>
+                </div>
+                }
+            />
 
-            {filteredOffer.name}
+            <div className="mb-7">
+                <p>Name: {filteredOffer?.customerName}</p>
+                <p>Phone: {filteredOffer?.phone}</p>
+                <p>Email: {filteredOffer?.email}</p>
+                <p>Address: {filteredOffer?.address}</p>
+            </div>
+
+            <div>
+                <h2 className="mb-4 font-bold text-[20px]">Articles</h2>
+                <ArticleLIst readOnly={true} articleList={filteredOffer?.articles} />
+            </div>
+
         </section>
     );
 };

@@ -93,14 +93,16 @@ const Article = ({openDrawer, article, readOnly, setEdit, onSelect, onDelete}) =
               <p>blinds: {articleBlinds.type}</p>
             </div>
             <div className="w-[100%] sm:w-[30%] lg:w-auto text-sm md:text-[16px]">
-              <p>price: {article.price}</p>
+              <p>price: {article.price} <span className="text-xs">EUR</span></p>
             </div>
-            {!readOnly &&(
-                <div className="flex gap-3 justify-between  sm:justify-end lg:justify-center w-[100%] sm:w-[50%] lg:w-auto lg:flex-col text-sm md:text-[16px]">
+            <div className="flex gap-3 justify-between  sm:justify-end lg:justify-center w-[100%] sm:w-[50%] lg:w-auto lg:flex-col text-sm md:text-[16px]">
+              {!readOnly &&(
+                <>
                   <Button onClick={()=>{setOpenConfirm(true)}}>Delete</Button>
                   <Button secondary={true} onClick={handleEdit}>Edit button</Button>
-                </div>
-            )}
+                </>
+                )}
+            </div>
           </div>
         </div>
         <ConfirmDialog

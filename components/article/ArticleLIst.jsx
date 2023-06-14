@@ -5,7 +5,7 @@ import Article from "@/components/Article";
 import CustomDrawer from "@/components/CustomDrawer";
 import ArticleForm from "@/components/article/ArticleForm";
 
-function ArticleLIst({articleList}) {
+function ArticleLIst({articleList, readOnly}) {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
@@ -34,6 +34,7 @@ function ArticleLIst({articleList}) {
                 <Article
                     key={article.id}
                     article={article}
+                    readOnly={readOnly}
                     setEdit={()=>{setIsEdit(true)}}
                     onSelect={handleSelectArticle}
                     onDelete={()=>handleDeleteArticle(article.id)}
