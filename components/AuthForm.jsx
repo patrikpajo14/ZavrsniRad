@@ -3,7 +3,7 @@
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import Input from "/components/forms/Input";

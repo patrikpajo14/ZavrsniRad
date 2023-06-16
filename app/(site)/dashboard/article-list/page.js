@@ -1,80 +1,65 @@
-"use client"
-
-import Button from "@/components/Button";
-import PageSubheader from "@/components/PageSubheader";
-import React, {useState} from "react";
-import CustomDrawer from "@/components/CustomDrawer";
-import ArticleForm from "@/components/article/ArticleForm";
+import React from "react";
 import ArticleLIst from "@/components/article/ArticleLIst";
+import ArticleListHeader from "./components/ArticleListHeader";
+import GetColors from "@/app/actions/GetColors";
+import GetArticleTypes from "@/app/actions/GetArticleTypes";
+import GetPanels from "@/app/actions/GetPanels";
 
-const ArticleListPage = () => {
-    const [openDrawer, setOpenDrawer] = useState(false);
+const ArticleListPage = async () => {
+  const _articleList = [
+    {
+      id: 1,
+      name: "Single window",
+      type_id: 1,
+      amount: 1,
+      width: 2000,
+      height: 2000,
+      color_id: 1,
+      opening: "right",
+      substock: 0,
+      blinds_id: 0,
+      extras_id: 0,
+      price: 200,
+    },
+    {
+      id: 2,
+      name: "Doors",
+      type_id: 1,
+      amount: 1,
+      width: 1000,
+      height: 2000,
+      color_id: 1,
+      opening: "right",
+      substock: 0,
+      blinds_id: 0,
+      extras_id: 0,
+      price: 700,
+    },
+    {
+      id: 3,
+      name: "Double window",
+      type_id: 1,
+      amount: 1,
+      width: 4000,
+      height: 2000,
+      color_id: 1,
+      opening: "right",
+      substock: 1,
+      blinds_id: 0,
+      extras_id: 0,
+      price: 600,
+    },
+  ];
 
-    const _articleList = [
-        {
-            id: 1,
-            name: "Single window",
-            type_id: 1,
-            amount: 1,
-            width: 2000,
-            height: 2000,
-            color_id: 1,
-            opening: "right",
-            substock: 0,
-            blinds_id: 0,
-            extras_id: 0,
-            price: 200
-        },
-        {
-            id: 2,
-            name: "Doors",
-            type_id: 1,
-            amount: 1,
-            width: 1000,
-            height: 2000,
-            color_id: 1,
-            opening: "right",
-            substock: 0,
-            blinds_id: 0,
-            extras_id: 0,
-            price: 700
-        },
-        {
-            id: 3,
-            name: "Double window",
-            type_id: 1,
-            amount: 1,
-            width: 4000,
-            height: 2000,
-            color_id: 1,
-            opening: "right",
-            substock: 1,
-            blinds_id: 0,
-            extras_id: 0,
-            price: 600
-        }
-    ]
-
-    const handleCloseDrawer = () =>{
-        setOpenDrawer(false);
-    }
-
-    const handleOpenDrawer =()=>{
-        setOpenDrawer(true)
-    }
-
+  const colors = await GetColors();
+  const types = await GetArticleTypes();
+  const panels = await GetPanels();
+  console.log(panels);
 
   return (
     <section>
-      <PageSubheader
-        title={"Article List"}
-        body={<Button onClick={handleOpenDrawer}>New article</Button>}
-      />
-        <ArticleLIst articleList={_articleList}/>
-
-        <CustomDrawer isOpened={openDrawer} onClose={handleCloseDrawer} title={"Create article"}>
-            <ArticleForm/>
-        </CustomDrawer>
+      <ArticleListHeader colors={colors} />
+      <ArticleLIst articleList={_articleList} />
     </section>
   );
 };

@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
+  name           String?
   email          String?   @unique
   emailVerified  DateTime?
   image          String?
@@ -21,6 +21,7 @@ model User {
   updatedAt      DateTime  @updatedAt
 
   accounts Account[]
+  offers Offer[]
 }
 
 model Account {
@@ -40,4 +41,105 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Offer{
+  id                    String @id @default(auto()) @map("_id") @db.ObjectId
+  customer_name         String
+  customer_address      String
+  customer_phone_number String
+  customer_email        String
+  create_date           DateTime @default(now())
+  status                String
+  place_id              String @db.ObjectId
+  place                 Places @relation(fields: [place_id], references: [id])
+  user_id               String @db.ObjectId
+  user                  User @relation(fields: [user_id], references: [id])
+
+  articleIDs            String[] @db.ObjectId
+  articles              Article[]   @relation(fields: [articleIDs], references: [id])
+ }
+
+  model Places{
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    place_name String
+    offers     Offer[]
+ }
+
+model Article{
+    id             String @id @default(auto()) @map("_id") @db.ObjectId
+    name           String
+    amount         Int
+    width          Int
+    height         Int
+    opening        String
+    substock       String
+    price          Int
+
+    typeId         String @db.ObjectId
+    type           Type @relation(fields: [typeId], references: [id])
+
+    panelId        String @db.ObjectId
+    panel          Panel @relation(fields: [panelId], references: [id])
+
+    colorId        String @db.ObjectId
+    color          Color @relation(fields: [colorId], references: [id])
+
+    blindsId       String @db.ObjectId
+    blinds         Blinds @relation(fields: [blindsId], references: [id])
+
+    extrasId       String @db.ObjectId
+    extras         ExtraNet @relation(fields: [extrasId], references: [id])
+
+    offersIDs      String[] @db.ObjectId
+    offers         Offer[] @relation(fields: [offersIDs], references: [id])
+}
+
+model Type{
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+  image String?
+  articles Article[]
+}
+
+model Panel{
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String @unique
+  articles Article[]
+}
+
+model Color{
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String @unique
+  articles Article[]
+}
+
+model Blinds{
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  typeId   String @db.ObjectId
+  type     BlindsType @relation(fields: [typeId], references: [id])
+  width    Int
+  height   Int
+  articles Article[]
+}
+
+model ExtraNet{
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  typeId   String @db.ObjectId
+  type     NetsType @relation(fields: [typeId], references: [id])
+  width    Int
+  height   Int
+  articles Article[]
+}
+
+model BlindsType{
+   id      String @id @default(auto()) @map("_id") @db.ObjectId 
+   name    String @unique
+   blinds  Blinds[]
+}
+
+model NetsType{
+   id      String @id @default(auto()) @map("_id") @db.ObjectId 
+   name    String @unique
+   extra_nets  ExtraNet[]
 }

@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const sidebarLinks = ["/", "offers", "article-list", "profile"];
-const sidebarTranslate = ["Dashboard", "Offers", "Articles", "Profile"];
+const sidebarLinks = ["/", "offers", "article-list", "administration"];
+const sidebarTranslate = ["Dashboard", "Offers", "Articles", "Administration"];
 const sidebarIcons = [
   "/assets/icons/ico_dashboard.svg",
   "/assets/icons/ico_offers.svg",

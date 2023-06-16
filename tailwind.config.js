@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "475px",
+      },
       fontFamily: {
         satoshi: ["Satoshi", "sans-serif"],
         inter: ["Inter", "sans-serif"],
@@ -16,7 +19,7 @@ module.exports = {
         "primary-lightred": "#FAF8F8",
         "primary-gray": "#D9D9D9",
       },
-    
+
       boxShadow: {
         main: "0 5px 15px 5px rgba(0, 0, 0, 0.05)",
       },
