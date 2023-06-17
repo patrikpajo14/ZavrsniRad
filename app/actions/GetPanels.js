@@ -1,14 +1,11 @@
-import prisma from "@/app/libs/prismadb";
+import { useQuery } from "react-query";
 
-const GetPanels = async () => {
-  try {
-    const panels = await prisma.panel.findMany();
-    console.log(panels);
-    return panels;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+export const useGetPanels = () => {
+  return useQuery("getPanels", async () => {
+    const response = await fetch("/api/panel");
+    if (!response.ok) {
+      throw new Error("Failed to fetch panels");
+    }
+    return response.json();
+  });
 };
-
-export default GetPanels;

@@ -1,14 +1,11 @@
-import prisma from "@/app/libs/prismadb";
+import { useQuery } from "react-query";
 
-const GetArticleTypes = async () => {
-  try {
-    const types = await prisma.type.findMany();
-    console.log(types);
-    return types;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+export const useGetArticleType = () => {
+  return useQuery("getArticleType", async () => {
+    const response = await fetch("/api/articleType");
+    if (!response.ok) {
+      throw new Error("Failed to fetch ArticleType");
+    }
+    return response.json();
+  });
 };
-
-export default GetArticleTypes;

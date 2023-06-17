@@ -1,14 +1,11 @@
-import prisma from "@/app/libs/prismadb";
+import { useQuery } from "react-query";
 
-const GetExtrasTypes = async () => {
-  try {
-    const types = await prisma.netsType.findMany();
-    console.log(types);
-    return types;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+export const useGetExtrasType = () => {
+  return useQuery("getExtrasType", async () => {
+    const response = await fetch("/api/extrasType");
+    if (!response.ok) {
+      throw new Error("Failed to fetch ExtrasType");
+    }
+    return response.json();
+  });
 };
-
-export default GetExtrasTypes;

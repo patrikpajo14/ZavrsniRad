@@ -31,7 +31,6 @@ export async function POST(request) {
 export async function GET() {
   try {
     const panels = await prisma.panel.findMany();
-    console.log(panels);
     return NextResponse.json(panels);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });

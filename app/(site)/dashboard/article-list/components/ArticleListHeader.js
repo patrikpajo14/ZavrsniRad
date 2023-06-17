@@ -5,10 +5,8 @@ import PageSubheader from "@/components/PageSubheader";
 import ArticleForm from "@/components/article/ArticleForm";
 import React, { useState } from "react";
 
-const ArticleListHeader = ({ colors }) => {
+const ArticleListHeader = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  console.log(colors);
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
@@ -28,7 +26,7 @@ const ArticleListHeader = ({ colors }) => {
         onClose={handleCloseDrawer}
         title={"Create article"}
       >
-        <ArticleForm colors={colors} />
+        <ArticleForm />
       </CustomDrawer>
     </>
   );

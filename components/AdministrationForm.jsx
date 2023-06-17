@@ -52,7 +52,6 @@ const AdministrationForm = ({ title, inputLabel, btnText, url }) => {
     } catch (error) {
       toast.error(error.message);
     }
-    setIsLoading(false);
   };
 
   return (

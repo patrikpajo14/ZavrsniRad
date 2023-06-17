@@ -31,7 +31,6 @@ export async function POST(request) {
 export async function GET() {
   try {
     const blindsTypes = await prisma.blindsType.findMany();
-    console.log(blindsTypes);
     return NextResponse.json(blindsTypes);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });

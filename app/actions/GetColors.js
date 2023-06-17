@@ -1,14 +1,11 @@
-import prisma from "@/app/libs/prismadb";
+import { useQuery } from "react-query";
 
-const GetColors = async () => {
-  try {
-    const colors = await prisma.color.findMany();
-    console.log(colors);
-    return colors;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+export const useGetColors = () => {
+  return useQuery("getColors", async () => {
+    const response = await fetch("/api/colors");
+    if (!response.ok) {
+      throw new Error("Failed to fetch colors");
+    }
+    return response.json();
+  });
 };
-
-export default GetColors;

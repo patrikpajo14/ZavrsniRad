@@ -31,7 +31,6 @@ export async function POST(request) {
 export async function GET() {
   try {
     const colors = await prisma.color.findMany();
-    console.log(colors);
     return NextResponse.json(colors);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });

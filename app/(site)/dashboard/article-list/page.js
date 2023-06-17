@@ -1,9 +1,6 @@
 import React from "react";
 import ArticleLIst from "@/components/article/ArticleLIst";
 import ArticleListHeader from "./components/ArticleListHeader";
-import GetColors from "@/app/actions/GetColors";
-import GetArticleTypes from "@/app/actions/GetArticleTypes";
-import GetPanels from "@/app/actions/GetPanels";
 
 const ArticleListPage = async () => {
   const _articleList = [
@@ -51,14 +48,9 @@ const ArticleListPage = async () => {
     },
   ];
 
-  const colors = await GetColors();
-  const types = await GetArticleTypes();
-  const panels = await GetPanels();
-  console.log(panels);
-
   return (
     <section>
-      <ArticleListHeader colors={colors} />
+      <ArticleListHeader />
       <ArticleLIst articleList={_articleList} />
     </section>
   );

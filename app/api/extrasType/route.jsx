@@ -31,7 +31,6 @@ export async function POST(request) {
 export async function GET() {
   try {
     const extrasTypes = await prisma.netsType.findMany();
-    console.log(extrasTypes);
     return NextResponse.json(extrasTypes);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });

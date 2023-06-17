@@ -1,14 +1,11 @@
-import prisma from "@/app/libs/prismadb";
+import { useQuery } from "react-query";
 
-const GetBlindsTypes = async () => {
-  try {
-    const types = await prisma.blindsType.findMany();
-    console.log(types);
-    return types;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+export const useGetBlindsType = () => {
+  return useQuery("getBlindsType", async () => {
+    const response = await fetch("/api/blindsType");
+    if (!response.ok) {
+      throw new Error("Failed to fetch BlindsType");
+    }
+    return response.json();
+  });
 };
-
-export default GetBlindsTypes;
