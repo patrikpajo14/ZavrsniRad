@@ -35,7 +35,7 @@ const Select = ({
           id={name}
           value={selectedValue}
           {...register(name, { required })}
-          onChange={(e) => setSelectedValue(e.target.value)}
+          onChange={(e) => {setSelectedValue(e.target.value); console.log(e.target.value);}}
           className={clsx(
             `
               block 

@@ -5,22 +5,21 @@ export async function POST(request) {
   const body = await request.json();
   const {
     typeId,
-    panel,
-    color,
+    panelId,
+    colorId,
     opening,
     substock,
+    amount,
     width,
     height,
-    blindsType,
+    blindsTypeId,
     blindsWidth,
     blindsHeight,
-    extrasType,
+    extrasTypeId,
     extrasWidth,
     extrasHeight,
     price,
   } = body;
-
-  console.log("BODY", body);
 
   const type = await prisma.type.findUnique({
     where: {
@@ -30,26 +29,46 @@ export async function POST(request) {
 
   const name = type.name;
 
-  if (!type || !panel || !opening || !substock || !width || !height || !price) {
+  if (
+    !type ||
+    !panelId ||
+    !opening ||
+    !substock ||
+    !width ||
+    !height ||
+    !price
+  ) {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
   const article = await prisma.article.create({
     data: {
       name: name,
-      panel,
-      color,
-      opening,
-      substock,
-      width,
-      height,
-      blindsType,
-      blindsWidth,
-      blindsHeight,
-      extrasType,
-      extrasWidth,
-      extrasHeight,
-      price,
+      amount: amount,
+      width: width,
+      height: height,
+      opening: opening,
+      substock: substock,
+      price: price,
+      type: {
+        connect: { id: typeId },
+      },
+      panel: {
+        connect: { id: panelId },
+      },
+      color: {
+        connect: { id: colorId },
+      },
+      blinds: {
+        connect: { id: blindsTypeId },
+      },
+      blindsWidth: blindsWidth,
+      blindsHeight: blindsHeight,
+      extras: {
+        connect: { id: extrasTypeId },
+      },
+      extrasWidth: extrasWidth,
+      extrasHeight: extrasHeight,
     },
   });
 

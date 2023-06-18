@@ -1,57 +1,20 @@
+"use client";
 import React from "react";
 import ArticleLIst from "@/components/article/ArticleLIst";
 import ArticleListHeader from "./components/ArticleListHeader";
+import { useGetArticles } from "@/app/actions/GetArticles";
 
-const ArticleListPage = async () => {
-  const _articleList = [
-    {
-      id: 1,
-      name: "Single window",
-      type_id: 1,
-      amount: 1,
-      width: 2000,
-      height: 2000,
-      color_id: 1,
-      opening: "right",
-      substock: 0,
-      blinds_id: 0,
-      extras_id: 0,
-      price: 200,
-    },
-    {
-      id: 2,
-      name: "Doors",
-      type_id: 1,
-      amount: 1,
-      width: 1000,
-      height: 2000,
-      color_id: 1,
-      opening: "right",
-      substock: 0,
-      blinds_id: 0,
-      extras_id: 0,
-      price: 700,
-    },
-    {
-      id: 3,
-      name: "Double window",
-      type_id: 1,
-      amount: 1,
-      width: 4000,
-      height: 2000,
-      color_id: 1,
-      opening: "right",
-      substock: 1,
-      blinds_id: 0,
-      extras_id: 0,
-      price: 600,
-    },
-  ];
+const ArticleListPage = () => {
+  const { data, isLoading, isError } = useGetArticles();
+
+  if (isError) {
+    return <div>Error fetching data</div>;
+  }
 
   return (
     <section>
       <ArticleListHeader />
-      <ArticleLIst articleList={_articleList} />
+      {isLoading ? <p>Loading...</p> : <ArticleLIst articleList={data} />}
     </section>
   );
 };

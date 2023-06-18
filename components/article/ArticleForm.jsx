@@ -15,6 +15,7 @@ import { useGetExtrasType } from "@/app/actions/GetExtrasType";
 import { useGetBlindsType } from "@/app/actions/GetBlindsType";
 import { useGetArticleType } from "@/app/actions/GetArticleTypes";
 import axios from "axios";
+import { useGetArticles } from "@/app/actions/GetArticles";
 
 export default function ArticleForm({ isEdit = false, article }) {
   const colors = useGetColors();
@@ -23,41 +24,52 @@ export default function ArticleForm({ isEdit = false, article }) {
   const blindsTypes = useGetBlindsType();
   const types = useGetArticleType();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const articleExtras = extrasTypes?.data?.find((extras) => {
+    return extras?.id === article?.extrasId;
+  });
+  const articleBlinds = blindsTypes?.data?.find((blinds) => {
+    return blinds?.id === article?.blindsId;
+  });
+
+  const { refetch, isLoading } = useGetArticles();
+
+  const [loading, setLoading] = useState(false);
   const [haveBlinds, setHaveBlinds] = useState(false);
   const [haveExtras, setHaveExtras] = useState(false);
 
   const ArticleSchema = Yup.object().shape({
-    type: Yup.number().required("Required"),
-    panel: Yup.number().required("Required"),
-    color: Yup.number().required("Required"),
+    typeId: Yup.string().required("Required"),
+    panelId: Yup.string().required("Required"),
+    colorId: Yup.string().required("Required"),
     width: Yup.number().required("Required"),
     height: Yup.number().required("Required"),
-    blindsType: Yup.number().required("Required"),
+    blindsTypeId: Yup.string().required("Required"),
     blindsWidth: Yup.number().required("Required"),
     blindsHeight: Yup.number().required("Required"),
-    extrasType: Yup.number().required("Required"),
+    extrasTypeId: Yup.string().required("Required"),
     extrasWidth: Yup.number().required("Required"),
     extrasHeight: Yup.number().required("Required"),
     price: Yup.number().required("Required"),
+    amount: Yup.number().required("Required"),
   });
 
   const defaultValues = useMemo(
     () => ({
-      type: article?.type || "",
-      panel: article?.panel || "",
-      color: article?.color || "",
+      typeId: article?.typeId || "",
+      panelId: article?.panelId || "",
+      colorId: article?.colorId || "",
       opening: article?.opening || "",
       substock: article?.substock || "",
-      width: article?.width || "",
-      height: article?.height || "",
-      blindsType: article?.blindsType || "",
-      blindsWidth: article?.blindsWidth || "",
-      blindsHeight: article?.blindsHeight || "",
-      extrasType: article?.extrasType || "",
-      extrasWidth: article?.extrasWidth || "",
-      extrasHeight: article?.extrasHeight || "",
-      price: article?.price || "",
+      width: article?.width || 0,
+      amount: article?.amount || 1,
+      height: article?.height || 0,
+      blindsTypeId: article?.blindsId || "",
+      blindsWidth: article?.blindsWidth || 0,
+      blindsHeight: article?.blindsHeight || 0,
+      extrasTypeId: article?.extrasId || "",
+      extrasWidth: article?.extrasWidth || 0,
+      extrasHeight: article?.extrasHeight || 0,
+      price: article?.price || 0,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [article]
@@ -78,6 +90,13 @@ export default function ArticleForm({ isEdit = false, article }) {
   useEffect(() => {
     if (isEdit && article) {
       reset(defaultValues);
+      articleBlinds?.id === "648ec585f8b656a025269d84"
+        ? setHaveBlinds(false)
+        : setHaveBlinds(true);
+
+      articleExtras?.id === "648ec57ff8b656a025269d82"
+        ? setHaveExtras(false)
+        : setHaveExtras(true);
     }
     if (!isEdit) {
       reset(defaultValues);
@@ -88,23 +107,37 @@ export default function ArticleForm({ isEdit = false, article }) {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-      setIsLoading(true);
+      setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      axios
-        .post("/api/article", data)
-        .then((callback) => {
-          if (callback?.status === 200) {
-            toast.success(!isEdit ? "Article Created" : "Article updated");
-          }
-        })
-        .catch((error) => toast.error(error.response.data))
-        .finally(() => setIsLoading(false));
+      if (isEdit && article) {
+        axios
+          .put(`/api/article/${article.id}`, data)
+          .then((callback) => {
+            if (callback?.status === 200) {
+              toast.success("Article updated");
+            }
+          })
+          .catch((error) => toast.error(error.response.data))
+          .finally(() => setLoading(false));
+      }
+      if (!isEdit) {
+        axios
+          .post("/api/article", data)
+          .then((callback) => {
+            if (callback?.status === 200) {
+              toast.success("Article Created");
+            }
+          })
+          .catch((error) => toast.error(error.response.data))
+          .finally(() => setLoading(false));
+      }
       reset();
+      refetch();
       console.log("DATA", data);
     } catch (error) {
       console.error(error);
     }
-    setIsLoading(false);
+    setLoading(false);
   };
 
   return (
@@ -116,8 +149,8 @@ export default function ArticleForm({ isEdit = false, article }) {
             <Select
               label={"Type"}
               placeholder={"Select type..."}
-              disabled={isLoading}
-              name={"type"}
+              disabled={loading}
+              name={"typeId"}
               errors={errors}
               register={register}
             >
@@ -129,9 +162,9 @@ export default function ArticleForm({ isEdit = false, article }) {
             </Select>
             <Select
               label={"Type of panel"}
-              disabled={isLoading}
+              disabled={loading}
               placeholder={"Select panel..."}
-              name={"panel"}
+              name={"panelId"}
               errors={errors}
               register={register}
             >
@@ -165,8 +198,8 @@ export default function ArticleForm({ isEdit = false, article }) {
             <Select
               label={"Color"}
               placeholder={"Select color..."}
-              disabled={isLoading}
-              name={"color"}
+              disabled={loading}
+              name={"colorId"}
               errors={errors}
               register={register}
             >
@@ -182,7 +215,7 @@ export default function ArticleForm({ isEdit = false, article }) {
           <h2 className="text-xl font-bold mb-4">Dimensions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-5">
             <Input
-              disabled={isLoading}
+              disabled={loading}
               errors={errors}
               required
               register={register}
@@ -191,7 +224,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               type="number"
             />
             <Input
-              disabled={isLoading}
+              disabled={loading}
               errors={errors}
               required
               register={register}
@@ -210,7 +243,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                 handleOnChange={() => {
                   setHaveBlinds(!haveBlinds);
                 }}
-                defaultValue={"no"}
+                defaultValue={haveBlinds ? "yes" : "no"}
                 register={register}
                 inputs={[
                   { id: "blindsYes", name: "blinds", value: "yes" },
@@ -223,8 +256,8 @@ export default function ArticleForm({ isEdit = false, article }) {
                 <Select
                   label={"Type"}
                   placeholder={"Select type..."}
-                  disabled={isLoading}
-                  name={"blindsType"}
+                  disabled={loading}
+                  name={"blindsTypeId"}
                   errors={errors}
                   register={register}
                 >
@@ -235,7 +268,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   ))}
                 </Select>
                 <Input
-                  disabled={isLoading}
+                  disabled={loading}
                   errors={errors}
                   required
                   register={register}
@@ -244,7 +277,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   type="number"
                 />
                 <Input
-                  disabled={isLoading}
+                  disabled={loading}
                   errors={errors}
                   required
                   register={register}
@@ -265,7 +298,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                 handleOnChange={() => {
                   setHaveExtras(!haveExtras);
                 }}
-                defaultValue={"no"}
+                defaultValue={haveExtras ? "yes" : "no"}
                 register={register}
                 inputs={[
                   { id: "extrasYes", name: "extras", value: "yes" },
@@ -278,19 +311,19 @@ export default function ArticleForm({ isEdit = false, article }) {
                 <Select
                   label={"Type"}
                   placeholder={"Select type..."}
-                  disabled={isLoading}
-                  name={"extrasType"}
+                  disabled={loading}
+                  name={"extrasTypeId"}
                   errors={errors}
                   register={register}
                 >
                   {extrasTypes.data.map((option, index) => (
-                    <option key={index} value={option.name}>
+                    <option key={index} value={option.id}>
                       {option.name}
                     </option>
                   ))}
                 </Select>
                 <Input
-                  disabled={isLoading}
+                  disabled={loading}
                   errors={errors}
                   required
                   register={register}
@@ -299,7 +332,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   type="number"
                 />
                 <Input
-                  disabled={isLoading}
+                  disabled={loading}
                   errors={errors}
                   required
                   register={register}
@@ -315,7 +348,7 @@ export default function ArticleForm({ isEdit = false, article }) {
           <h2 className="text-xl font-bold mb-4">Price</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-5">
             <Input
-              disabled={isLoading}
+              disabled={loading}
               errors={errors}
               required
               register={register}
@@ -323,11 +356,20 @@ export default function ArticleForm({ isEdit = false, article }) {
               label="Price"
               type="number"
             />
-            <div className="flex flex-col justify-end pt-2 sm:p-0">
-              <Button disabled={isLoading} fullWidth type="submit">
-                {!isEdit ? "Create Article" : "Update Article"}
-              </Button>
-            </div>
+            <Input
+              disabled={loading}
+              errors={errors}
+              required
+              register={register}
+              id="amount"
+              label="Amount"
+              type="number"
+            />
+          </div>
+          <div className="pt-6">
+            <Button disabled={loading} fullWidth type="submit">
+              {!isEdit ? "Create Article" : "Update Article"}
+            </Button>
           </div>
         </div>
       </FormProvider>
