@@ -16,6 +16,7 @@ const Article = ({
   setEdit,
   onSelect,
   onDelete,
+  offerItem = false,
 }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -94,19 +95,29 @@ const Article = ({
             </p>
           </div>
           <div className="flex gap-3 justify-between  sm:justify-end lg:justify-center w-[100%] md:w-[50%] lg:w-auto sm:flex-col text-sm md:text-[16px]">
-            {!readOnly && (
-              <>
-                <Button
-                  onClick={() => {
-                    setOpenConfirm(true);
-                  }}
-                >
-                  Delete
-                </Button>
-                <Button secondary={true} onClick={handleEdit}>
-                  Edit button
-                </Button>
-              </>
+            {!readOnly ||
+              (!offerItem && (
+                <>
+                  <Button
+                    onClick={() => {
+                      setOpenConfirm(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button secondary={true} onClick={handleEdit}>
+                    Edit button
+                  </Button>
+                </>
+              ))}
+            {offerItem && (
+              <Button
+                onClick={() => {
+                  setOpenConfirm(true);
+                }}
+              >
+                Remove
+              </Button>
             )}
           </div>
         </div>
@@ -114,11 +125,15 @@ const Article = ({
       <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
-        title="Izbriši"
-        content="Jeste li sigurni da želite obrisati?"
+        title={offerItem ? "Remove article" : "Delete article"}
+        content={
+          offerItem
+            ? "Do you realy wan't to remove this article from offer?"
+            : "Are you sure that you wan't to delete this article?"
+        }
         action={
           <Button variant="contained" color="error" onClick={handleDelete}>
-            Izbriši
+            {offerItem ? "Remove" : "Delete"}
           </Button>
         }
       />

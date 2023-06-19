@@ -12,6 +12,8 @@ const Select = ({
   placeholder,
   register,
   required,
+  onChange,
+  reset,
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -35,7 +37,12 @@ const Select = ({
           id={name}
           value={selectedValue}
           {...register(name, { required })}
-          onChange={(e) => {setSelectedValue(e.target.value); console.log(e.target.value);}}
+          onChange={(e) => {
+            if (!reset) {
+              setSelectedValue(e.target.value);
+            }
+            onChange(e);
+          }}
           className={clsx(
             `
               block 

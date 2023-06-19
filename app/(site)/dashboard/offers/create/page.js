@@ -9,8 +9,6 @@ const CreateOffer = () => {
       <PageSubheader title={"Create offer"} />
 
       <OffersForm />
-
-      <div className="mt-[20px] py-[10px] mx-[-15px] px-[15px]"></div>
     </section>
   );
 };

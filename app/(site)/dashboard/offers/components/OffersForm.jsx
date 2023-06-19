@@ -8,15 +8,21 @@ import { useForm } from "react-hook-form";
 import Select from "@/components/forms/Select";
 import FormProvider from "@/components/forms/FormProvider";
 import { toast } from "react-hot-toast";
-
-const article_list = ["single window", "single doors", "double doors"];
+import { useGetArticles } from "@/app/actions/GetArticles";
+import ArticleLIst from "@/components/article/ArticleLIst";
+import Article from "@/components/Article";
+import axios from "axios";
 
 const OffersForm = ({ isEdit = false, offer }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedArticles, setSelectedArticles] = useState([]);
+
+  const articles = useGetArticles();
 
   const OffersSchema = Yup.object().shape({
     customerName: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
+    city: Yup.string().required("Required"),
     email: Yup.string().required("Required"),
     phone: Yup.string().required("Required"),
   });
@@ -25,6 +31,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
     () => ({
       customerName: offer?.customerName || "",
       address: offer?.address || "",
+      address: offer?.city || "",
       email: offer?.email || "",
       phone: offer?.phone || "",
     }),
@@ -54,13 +61,81 @@ const OffersForm = ({ isEdit = false, offer }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, offer]);
 
+  const handleOnSelect = (event) => {
+    let tmpArticle = articles?.data?.find((article) => {
+      return article?.id === event.target.value;
+    });
+
+    const newState = selectedArticles?.map((article) => {
+      if (article?.id === tmpArticle?.id) {
+        // toast.error("You already selected this item!");
+        tmpArticle = null;
+        return { ...article, amount: article.amount + 1 };
+      }
+
+      return article;
+    });
+
+    console.log("POSLJE UPDATE", newState);
+
+    if (tmpArticle !== null) {
+      setSelectedArticles([...newState, tmpArticle]);
+    } else {
+      setSelectedArticles([...newState]);
+    }
+  };
+
+  const handleDeleteArticle = (id) => {
+    /*     axios
+      .delete(`/api/article/${id}`)
+      .then((callback) => {
+        if (callback?.status === 200) {
+          toast.success("Article deleted successfuly!");
+        }
+      })
+      .catch((error) => toast.error(error.response.data)); */
+    const deleteRow = selectedArticles.filter((row) => row.id !== id);
+    setSelectedArticles(deleteRow);
+  };
+
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
-      toast.success(!isEdit ? "Create success" : "Update success");
-      console.log("DATA", data);
+      const body = {
+        data: data,
+        articles: selectedArticles,
+      };
+      const place = {
+        name: data.city,
+      };
+      setSelectedArticles([]);
+
+      if (isEdit && offer) {
+        /*         axios
+          .put(`/api/article/${article.id}`, data)
+          .then((callback) => {
+            if (callback?.status === 200) {
+              toast.success("Offer is updated successfuly");
+            }
+          })
+          .catch((error) => toast.error(error.response.data))
+          .finally(() => setLoading(false)); */
+      }
+      if (!isEdit) {
+        axios.post("/api/place", place);
+        axios
+          .post("/api/offer", body)
+          .then((callback) => {
+            if (callback?.status === 200) {
+              toast.success("Offer is created successfuly");
+            }
+          })
+          .catch((error) => toast.error(error.response.data))
+          .finally(() => setIsLoading(false));
+      }
+      console.log("DATA", body);
     } catch (error) {
       console.error(error);
     }
@@ -68,60 +143,99 @@ const OffersForm = ({ isEdit = false, offer }) => {
   };
 
   return (
-    <div className="card">
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-[20px] md:gap-5 md:p-[30px]">
-          <Input
-            disabled={isLoading}
-            errors={errors}
-            required
-            register={register}
-            id="customerName"
-            label="Customer Name"
-          />
-          <Input
-            disabled={isLoading}
-            errors={errors}
-            required
-            register={register}
-            id="address"
-            label="Address"
-            type="text"
-          />
-          <Input
-            disabled={isLoading}
-            errors={errors}
-            required
-            register={register}
-            id="email"
-            label="Email"
-            type="email"
-          />
-          <Input
-            disabled={isLoading}
-            errors={errors}
-            required
-            register={register}
-            id="phone"
-            label="Phone"
-            type="number"
-          />
-          <Select
-            label={"Article"}
-            placeholder={"Select your article"}
-            disabled={isLoading}
-            name={"article"}
-            options={article_list}
-          />
+    <>
+      <div className="card">
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-[20px] md:gap-5 md:p-[30px]">
+            <Input
+              disabled={isLoading}
+              errors={errors}
+              required
+              register={register}
+              id="customerName"
+              label="Customer Name"
+            />
+            <Input
+              disabled={isLoading}
+              errors={errors}
+              required
+              register={register}
+              id="address"
+              label="Address"
+              type="text"
+            />
+            <Input
+              disabled={isLoading}
+              errors={errors}
+              required
+              register={register}
+              id="city"
+              label="City"
+              type="text"
+            />
+            <Input
+              disabled={isLoading}
+              errors={errors}
+              required
+              register={register}
+              id="email"
+              label="Email"
+              type="email"
+            />
+            <Input
+              disabled={isLoading}
+              errors={errors}
+              required
+              register={register}
+              id="phone"
+              label="Phone"
+              type="number"
+            />
+            <Select
+              label={"Article"}
+              placeholder={"Select article..."}
+              disabled={isLoading}
+              name={"article"}
+              errors={errors}
+              register={register}
+              onChange={handleOnSelect}
+              reset={true}
+            >
+              {articles.data?.map((option, index) => (
+                <option key={index} value={option.id}>
+                  {option.name} :{option.width}x{option.height}
+                  {`+ ${option.blindsWidth > 0 ? "Blinds" : ""}`}
+                </option>
+              ))}
+            </Select>
 
-          <div className="flex flex-col justify-end pt-2 sm:p-0">
-            <Button disabled={isLoading} fullWidth type="submit">
-              Custom article
-            </Button>
+            <div className="flex flex-col justify-end pt-2 sm:p-0">
+              <Button secondary disabled={isLoading} fullWidth>
+                Custom article
+              </Button>
+            </div>
+
+            <div className="flex flex-col justify-end pt-2 sm:p-0">
+              <Button disabled={isLoading} fullWidth type="submit">
+                Create offer
+              </Button>
+            </div>
           </div>
-        </div>
-      </FormProvider>
-    </div>
+        </FormProvider>
+      </div>
+      <div className="mt-7">
+        {selectedArticles?.map((article) => (
+          <Article
+            key={article.id}
+            article={article}
+            offerItem={true}
+            onDelete={() => {
+              handleDeleteArticle(article.id);
+            }}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
