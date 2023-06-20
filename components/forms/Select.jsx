@@ -5,6 +5,7 @@ import { useState } from "react";
 
 const Select = ({
   label,
+  value,
   children,
   disabled,
   name,
@@ -15,7 +16,9 @@ const Select = ({
   onChange,
   reset,
 }) => {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(
+    value !== undefined ? value : ""
+  );
 
   return (
     <div className="z-[100]">
@@ -40,8 +43,9 @@ const Select = ({
           onChange={(e) => {
             if (!reset) {
               setSelectedValue(e.target.value);
+            } else {
+              onChange(e);
             }
-            onChange(e);
           }}
           className={clsx(
             `
@@ -68,9 +72,11 @@ const Select = ({
             disabled && "opacity-50 cursor-default"
           )}
         >
-          <option value="" disabled>
-            {placeholder}
-          </option>
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
           {children}
         </select>
         {errors && (

@@ -25,16 +25,16 @@ const Article = ({
   const extrasTypes = useGetExtrasType();
   const blindsTypes = useGetBlindsType();
 
-  const articleColor = colors.data?.find((color) => {
+  const articleColor = colors?.data?.find((color) => {
     return color.id === article.colorId;
   });
-  const articlePanel = panels.data?.find((panels) => {
+  const articlePanel = panels?.data?.find((panels) => {
     return panels.id === article.panelId;
   });
-  const articleExtras = extrasTypes.data?.find((extras) => {
+  const articleExtras = extrasTypes?.data?.find((extras) => {
     return extras.id === article.extrasId;
   });
-  const articleBlinds = blindsTypes.data?.find((blinds) => {
+  const articleBlinds = blindsTypes?.data?.find((blinds) => {
     return blinds.id === article.blindsId;
   });
 
@@ -95,21 +95,20 @@ const Article = ({
             </p>
           </div>
           <div className="flex gap-3 justify-between  sm:justify-end lg:justify-center w-[100%] md:w-[50%] lg:w-auto sm:flex-col text-sm md:text-[16px]">
-            {!readOnly ||
-              (!offerItem && (
-                <>
-                  <Button
-                    onClick={() => {
-                      setOpenConfirm(true);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                  <Button secondary={true} onClick={handleEdit}>
-                    Edit button
-                  </Button>
-                </>
-              ))}
+            {!readOnly && !offerItem && (
+              <>
+                <Button
+                  onClick={() => {
+                    setOpenConfirm(true);
+                  }}
+                >
+                  Delete
+                </Button>
+                <Button secondary={true} onClick={handleEdit}>
+                  Edit button
+                </Button>
+              </>
+            )}
             {offerItem && (
               <Button
                 onClick={() => {

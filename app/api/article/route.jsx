@@ -60,12 +60,16 @@ export async function POST(request) {
         connect: { id: colorId },
       },
       blinds: {
-        connect: { id: blindsTypeId },
+        connect: {
+          id: blindsTypeId === "" ? "648ec585f8b656a025269d84" : blindsTypeId,
+        },
       },
       blindsWidth: blindsWidth,
       blindsHeight: blindsHeight,
       extras: {
-        connect: { id: extrasTypeId },
+        connect: {
+          id: extrasTypeId === "" ? "648ec57ff8b656a025269d82" : extrasTypeId,
+        },
       },
       extrasWidth: extrasWidth,
       extrasHeight: extrasHeight,

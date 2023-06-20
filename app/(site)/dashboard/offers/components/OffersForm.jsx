@@ -102,7 +102,6 @@ const OffersForm = ({ isEdit = false, offer }) => {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
       const body = {
         data: data,
         articles: selectedArticles,
@@ -124,7 +123,15 @@ const OffersForm = ({ isEdit = false, offer }) => {
           .finally(() => setLoading(false)); */
       }
       if (!isEdit) {
-        axios.post("/api/place", place);
+        axios
+          .post("/api/place", place)
+          .then((callback) => {
+            if (callback?.status === 200) {
+              toast.success("Offer is created successfuly");
+            }
+          })
+          .catch((error) => toast.error(error.response.data))
+          .finally(() => setIsLoading(false));
         axios
           .post("/api/offer", body)
           .then((callback) => {
@@ -135,6 +142,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
           .catch((error) => toast.error(error.response.data))
           .finally(() => setIsLoading(false));
       }
+      reset();
       console.log("DATA", body);
     } catch (error) {
       console.error(error);

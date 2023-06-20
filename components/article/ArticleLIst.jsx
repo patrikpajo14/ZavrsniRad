@@ -6,12 +6,15 @@ import CustomDrawer from "@/components/CustomDrawer";
 import ArticleForm from "@/components/article/ArticleForm";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useDeleteArticle } from "@/app/actions/GetArticles";
 
 function ArticleLIst({ articleList, readOnly }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [listData, setListData] = useState(articleList);
+
+  const { mutate: deleteArticle } = useDeleteArticle();
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
@@ -26,7 +29,7 @@ function ArticleLIst({ articleList, readOnly }) {
   };
 
   const handleDeleteArticle = (id) => {
-    axios
+    /* axios
       .delete(`/api/article/${id}`)
       .then((callback) => {
         if (callback?.status === 200) {
@@ -35,7 +38,8 @@ function ArticleLIst({ articleList, readOnly }) {
       })
       .catch((error) => toast.error(error.response.data));
     const deleteRow = listData.filter((row) => row.id !== id);
-    setListData(deleteRow);
+    setListData(deleteRow); */
+    deleteArticle(id);
   };
 
   return (

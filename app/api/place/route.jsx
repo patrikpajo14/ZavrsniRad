@@ -10,7 +10,7 @@ export async function POST(request) {
   if (!name) {
     return new NextResponse("Missing Fields", { status: 400 });
   }
-
+  /* 
   const exist = await prisma.place.findUnique({
     where: {
       name,
@@ -20,7 +20,7 @@ export async function POST(request) {
   if (exist) {
     return new NextResponse("Place already exists", { status: 500 });
   }
-
+ */
   const place = await prisma.place.create({
     data: {
       name,

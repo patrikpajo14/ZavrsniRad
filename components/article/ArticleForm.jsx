@@ -15,7 +15,11 @@ import { useGetExtrasType } from "@/app/actions/GetExtrasType";
 import { useGetBlindsType } from "@/app/actions/GetBlindsType";
 import { useGetArticleType } from "@/app/actions/GetArticleTypes";
 import axios from "axios";
-import { useGetArticles } from "@/app/actions/GetArticles";
+import {
+  useAddArticle,
+  useGetArticles,
+  useUpdateArticle,
+} from "@/app/actions/GetArticles";
 
 export default function ArticleForm({ isEdit = false, article }) {
   const colors = useGetColors();
@@ -33,6 +37,9 @@ export default function ArticleForm({ isEdit = false, article }) {
 
   const { refetch, isLoading } = useGetArticles();
 
+  const { mutate: addArticle } = useAddArticle();
+  const { mutate: updateArticle } = useUpdateArticle();
+
   const [loading, setLoading] = useState(false);
   const [haveBlinds, setHaveBlinds] = useState(false);
   const [haveExtras, setHaveExtras] = useState(false);
@@ -43,10 +50,14 @@ export default function ArticleForm({ isEdit = false, article }) {
     colorId: Yup.string().required("Required"),
     width: Yup.number().required("Required"),
     height: Yup.number().required("Required"),
-    blindsTypeId: Yup.string().required("Required"),
+    blindsTypeId: haveBlinds
+      ? Yup.string().required("Required")
+      : Yup.string().notRequired(),
     blindsWidth: Yup.number().required("Required"),
     blindsHeight: Yup.number().required("Required"),
-    extrasTypeId: Yup.string().required("Required"),
+    extrasTypeId: haveBlinds
+      ? Yup.string().required("Required")
+      : Yup.string().notRequired(),
     extrasWidth: Yup.number().required("Required"),
     extrasHeight: Yup.number().required("Required"),
     price: Yup.number().required("Required"),
@@ -105,12 +116,11 @@ export default function ArticleForm({ isEdit = false, article }) {
   }, [isEdit, article]);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log("DATA", data);
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
       if (isEdit && article) {
-        axios
+        /* axios
           .put(`/api/article/${article.id}`, data)
           .then((callback) => {
             if (callback?.status === 200) {
@@ -118,18 +128,11 @@ export default function ArticleForm({ isEdit = false, article }) {
             }
           })
           .catch((error) => toast.error(error.response.data))
-          .finally(() => setLoading(false));
+          .finally(() => setLoading(false)); */
+        updateArticle({ id: article.id, body: data });
       }
       if (!isEdit) {
-        axios
-          .post("/api/article", data)
-          .then((callback) => {
-            if (callback?.status === 200) {
-              toast.success("Article Created");
-            }
-          })
-          .catch((error) => toast.error(error.response.data))
-          .finally(() => setLoading(false));
+        addArticle(data);
       }
       reset();
       refetch();
