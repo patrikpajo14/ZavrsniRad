@@ -1,6 +1,4 @@
-import Button from "@/components/Button";
 import PageSubheader from "@/components/PageSubheader";
-import Test from "@/components/Test";
 import Link from "next/link";
 import React from "react";
 
@@ -23,7 +21,6 @@ const Dashboard = () => {
           </div>
         }
       />
-      <Test />
     </section>
   );
 };

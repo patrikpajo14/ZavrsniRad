@@ -3,46 +3,50 @@ import Button from "@/components/Button";
 import ConfirmDialog from "../ConfirmDialog";
 import IconButton from "../IconButton";
 import Image from "next/image";
+import { format, parseISO } from "date-fns";
 
-export default function OffersTableRow({ row, onDeleteRow, onEditRow, onViewRow }) {
-  const { id, customerName, date, address, price, status } = row;
+export default function OffersTableRow({
+  row,
+  onDeleteRow,
+  onEditRow,
+  onViewRow,
+}) {
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [color, setColor] = useState("green");
+
+  console.log(row);
+
+  const formatedDate = format(parseISO(row.create_date), "dd.MM.yyyy");
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
 
-  useEffect(() => {
-    status == "un paid" ? setColor("red") : setColor("green");
-  }, [row]);
-
   return (
     <>
       <tr>
-        <td align="left">{id}</td>
+        <td align="left">{row.id}</td>
 
         <td align="left" style={{ minWidth: "160px" }}>
-          {customerName}
+          {row.customer_name}
         </td>
 
         <td align="left" style={{ minWidth: "110px" }}>
-          {date}
+          {formatedDate}
         </td>
 
         <td align="left" style={{ minWidth: "140px" }}>
-          {address}
+          {row.customer_address}
         </td>
 
         <td align="left" style={{ minWidth: "100px" }}>
           <label
-            className={`px-3 py-1 rounded-lg bg-${color}-200 text-${color}-600 text-[12px] font-bold capitalize`}
+            className={`px-3 py-1 rounded-lg bg-green-200 text-green-600 text-[12px] font-bold capitalize`}
           >
-            {status}
+            {row.status}
           </label>
         </td>
 
-        <td align="left">{price}</td>
+        <td align="left">{row.total} €</td>
 
         <td align="right">
           <IconButton onClick={onEditRow}>
@@ -55,10 +59,10 @@ export default function OffersTableRow({ row, onDeleteRow, onEditRow, onViewRow 
           </IconButton>
           <IconButton onClick={onViewRow}>
             <Image
-                src="/assets/icons/ico_eye.svg"
-                alt="view"
-                width={20}
-                height={20}
+              src="/assets/icons/ico_eye.svg"
+              alt="view"
+              width={20}
+              height={20}
             />
           </IconButton>
           <IconButton

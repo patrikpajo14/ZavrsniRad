@@ -4,11 +4,34 @@ import { NextResponse } from "next/server";
 export async function DELETE(request, { params }) {
   try {
     const { id } = params;
-    const deletedArticle = await prisma.article.delete({
+
+    const deletedArticle = await prisma.article.findUnique({
       where: {
         id: id,
       },
+      include: { offers: true },
     });
+
+    console.log(deletedArticle);
+
+    const offerIdsToUpdate = deletedArticle.offersIDs;
+
+    console.log(offerIdsToUpdate);
+
+    for (const offerId of offerIdsToUpdate) {
+      console.log(offerId);
+      await prisma.offer.update({
+        where: { id: offerId },
+        data: {
+          ...data,
+          articleIDs: {
+            set: ["nista"],
+          },
+        },
+      });
+    }
+
+    console.log("kraj");
 
     return NextResponse.json(deletedArticle);
   } catch (error) {

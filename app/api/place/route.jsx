@@ -21,11 +21,7 @@ export async function POST(request) {
     return new NextResponse("Place already exists", { status: 500 });
   }
  */
-  const place = await prisma.place.create({
-    data: {
-      name,
-    },
-  });
+
 
   return NextResponse.json(place);
 }

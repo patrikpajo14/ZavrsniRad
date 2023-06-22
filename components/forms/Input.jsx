@@ -8,6 +8,7 @@ const Input = ({
   errors,
   type = "text",
   disabled,
+  sx,
 }) => {
   return (
     <div>
@@ -51,15 +52,21 @@ const Input = ({
               text-sm
               sm:text-md 
             `,
+            sx,
             errors[id] && "border-primary-red focus:border-primary-red",
             disabled && "opacity-50 cursor-default"
           )}
         />
-          {errors && (
-              <label htmlFor={id} className={clsx(
-                  "absolute top-[100%] right-0 text-primary-red text-sm"
-              )}>{errors[id]?.message}</label>
-          )}
+        {errors && (
+          <label
+            htmlFor={id}
+            className={clsx(
+              "absolute top-[100%] right-0 text-primary-red text-sm"
+            )}
+          >
+            {errors[id]?.message}
+          </label>
+        )}
       </div>
     </div>
   );

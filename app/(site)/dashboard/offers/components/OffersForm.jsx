@@ -10,7 +10,7 @@ import FormProvider from "@/components/forms/FormProvider";
 import { toast } from "react-hot-toast";
 import { useGetArticles } from "@/app/actions/GetArticles";
 import ArticleLIst from "@/components/article/ArticleLIst";
-import Article from "@/components/Article";
+import Article from "@/components/article/Article";
 import axios from "axios";
 
 const OffersForm = ({ isEdit = false, offer }) => {
@@ -68,15 +68,12 @@ const OffersForm = ({ isEdit = false, offer }) => {
 
     const newState = selectedArticles?.map((article) => {
       if (article?.id === tmpArticle?.id) {
-        // toast.error("You already selected this item!");
         tmpArticle = null;
         return { ...article, amount: article.amount + 1 };
       }
 
       return article;
     });
-
-    console.log("POSLJE UPDATE", newState);
 
     if (tmpArticle !== null) {
       setSelectedArticles([...newState, tmpArticle]);
@@ -86,14 +83,6 @@ const OffersForm = ({ isEdit = false, offer }) => {
   };
 
   const handleDeleteArticle = (id) => {
-    /*     axios
-      .delete(`/api/article/${id}`)
-      .then((callback) => {
-        if (callback?.status === 200) {
-          toast.success("Article deleted successfuly!");
-        }
-      })
-      .catch((error) => toast.error(error.response.data)); */
     const deleteRow = selectedArticles.filter((row) => row.id !== id);
     setSelectedArticles(deleteRow);
   };
@@ -123,15 +112,6 @@ const OffersForm = ({ isEdit = false, offer }) => {
           .finally(() => setLoading(false)); */
       }
       if (!isEdit) {
-        axios
-          .post("/api/place", place)
-          .then((callback) => {
-            if (callback?.status === 200) {
-              toast.success("Offer is created successfuly");
-            }
-          })
-          .catch((error) => toast.error(error.response.data))
-          .finally(() => setIsLoading(false));
         axios
           .post("/api/offer", body)
           .then((callback) => {
@@ -180,6 +160,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
               id="city"
               label="City"
               type="text"
+              sx="capitalize"
             />
             <Input
               disabled={isLoading}

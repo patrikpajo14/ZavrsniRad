@@ -30,6 +30,9 @@ export const useAddArticle = () => {
         };
       });
     },
+    onError: () => {
+      toast.error("Creating article failed!");
+    },
   });
 };
 
@@ -45,6 +48,9 @@ export const useUpdateArticle = () => {
       toast.success("Article Updated!");
       queryClient.invalidateQueries("articles");
     },
+    onError: () => {
+      toast.error("Update failed!");
+    },
   });
 };
 
@@ -54,10 +60,11 @@ const deleteArticle = (id) => {
 
 export const useDeleteArticle = () => {
   const queryClient = useQueryClient();
-  return useMutation(deleteArticle, {
+  return useMutation((id) => deleteArticle(id), {
     onSuccess: () => {
       toast.success("Article deleted successfuly!");
       queryClient.invalidateQueries("articles");
+      queryClient.invalidateQueries("offers");
     },
     onError: () => {
       toast.error("Something went wrong!");

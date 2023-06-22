@@ -58,11 +58,12 @@ model Offer{
 
   articleIDs            String[] @db.ObjectId
   articles              Article[]   @relation(fields: [articleIDs], references: [id])
+  articleList           Json[] @default([])
  }
 
   model Places{
     id         String  @id @default(auto()) @map("_id") @db.ObjectId
-    place_name String
+    place_name String  @unique
     offers     Offer[]
  }
 

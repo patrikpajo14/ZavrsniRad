@@ -1,18 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import Article from "@/components/Article";
+import Article from "@/components/article/Article";
 import CustomDrawer from "@/components/CustomDrawer";
 import ArticleForm from "@/components/article/ArticleForm";
-import axios from "axios";
-import { toast } from "react-hot-toast";
 import { useDeleteArticle } from "@/app/actions/GetArticles";
 
 function ArticleLIst({ articleList, readOnly }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
-  const [listData, setListData] = useState(articleList);
 
   const { mutate: deleteArticle } = useDeleteArticle();
 
@@ -29,16 +26,6 @@ function ArticleLIst({ articleList, readOnly }) {
   };
 
   const handleDeleteArticle = (id) => {
-    /* axios
-      .delete(`/api/article/${id}`)
-      .then((callback) => {
-        if (callback?.status === 200) {
-          toast.success("Article deleted successfuly!");
-        }
-      })
-      .catch((error) => toast.error(error.response.data));
-    const deleteRow = listData.filter((row) => row.id !== id);
-    setListData(deleteRow); */
     deleteArticle(id);
   };
 

@@ -2,12 +2,8 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import Button from "./Button";
+import Button from "../Button";
 import ConfirmDialog from "@/components/ConfirmDialog";
-import { useGetColors } from "@/app/actions/GetColors";
-import { useGetPanels } from "@/app/actions/GetPanels";
-import { useGetExtrasType } from "@/app/actions/GetExtrasType";
-import { useGetBlindsType } from "@/app/actions/GetBlindsType";
 
 const Article = ({
   openDrawer,
@@ -19,24 +15,6 @@ const Article = ({
   offerItem = false,
 }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
-
-  const colors = useGetColors();
-  const panels = useGetPanels();
-  const extrasTypes = useGetExtrasType();
-  const blindsTypes = useGetBlindsType();
-
-  const articleColor = colors?.data?.find((color) => {
-    return color.id === article.colorId;
-  });
-  const articlePanel = panels?.data?.find((panels) => {
-    return panels.id === article.panelId;
-  });
-  const articleExtras = extrasTypes?.data?.find((extras) => {
-    return extras.id === article.extrasId;
-  });
-  const articleBlinds = blindsTypes?.data?.find((blinds) => {
-    return blinds.id === article.blindsId;
-  });
 
   const handleEdit = () => {
     openDrawer();
@@ -73,19 +51,19 @@ const Article = ({
             <p>opening: {article?.opening}</p>
           </div>
           <div className="w-[100%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:flex-col text-sm md:text-[16px]">
-            <p>panel: {articlePanel?.name}</p>
-            <p>color: {articleColor?.name}</p>
+            <p>panel: {article?.panel?.name}</p>
+            <p>color: {article?.color?.name}</p>
             <p>sub stock: {article?.substock}</p>
           </div>
           <div className="w-[100%] md:w-[30%] flex flex-wrap gap-y-1 gap-x-3 md:gap-3 lg:w-auto lg:flex-col text-sm md:text-[16px]">
             <p>
-              mosquito nets: {articleExtras?.name}{" "}
+              mosquito nets: {article?.extras?.name}{" "}
               {article?.extrasWidth
                 ? `${article?.extrasWidth}x${article?.extrasHeight}`
                 : ""}
             </p>
             <p>
-              blinds: {articleBlinds?.name}{" "}
+              blinds: {article?.blinds?.name}{" "}
               {article?.blindsWidth
                 ? `${article?.blindsWidth}x${article?.blindsHeight}`
                 : ""}

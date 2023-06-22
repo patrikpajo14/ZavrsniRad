@@ -1,19 +1,18 @@
 "use client";
 import React from "react";
 import {
-  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TableResponsiveWrap,
 } from "@/components/table";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import OffersTableRow from "./OffersTableRow";
+import { useGetOffers } from "@/app/actions/GetOffers";
 
 const TABLE_HEAD = [
   { id: "id", label: "ID", align: "left" },
   { id: "customerName", label: "Customer name", align: "left" },
-  { id: "date", label: "Date", align: "left" },
+  { id: "date", label: "Create Date", align: "left" },
   { id: "address", label: "Address", align: "left" },
   { id: "status", label: "Status", align: "left" },
   { id: "price", label: "Price", align: "left" },
@@ -23,55 +22,11 @@ const TABLE_HEAD = [
 export default function OffersTable() {
   const { push } = useRouter();
 
-  const _offersList = [
-    {
-      id: "1",
-      customerName: "Jayvion Simon",
-      date: "03.05.2023",
-      address: "some address, 13",
-      status: "paid",
-      price: 2000,
-    },
-    {
-      id: "2",
-      customerName: "Lucian Obrien",
-      date: "03.05.2023",
-      address: "some address, 13",
-      status: "un paid",
-      price: 2000,
-    },
-    {
-      id: "3",
-      customerName: "Deja Brady",
-      date: "03.05.2023",
-      address: "some address, 13",
-      status: "un paid",
-      price: 2000,
-    },
-    {
-      id: "4",
-      customerName: "Harrison Stein",
-      date: "03.05.2023",
-      address: "some address, 13",
-      status: "paid",
-      price: 2000,
-    },
-    {
-      id: "5",
-      customerName: "Harrison Ford",
-      date: "03.05.2023",
-      address: "some address, 13",
-      status: "paid",
-      price: 2000,
-    },
-  ];
+  const { data: offers, isLoading } = useGetOffers();
 
-  const [tableData, setTableData] = useState(_offersList);
+  console.log(!isLoading && offers);
 
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setTableData(deleteRow);
-  };
+  const handleDeleteRow = (id) => {};
 
   const handleEditRow = (id) => {
     push(`/dashboard/offers/${id}`);
@@ -88,22 +43,22 @@ export default function OffersTable() {
       </div>
       <TableResponsiveWrap>
         <table className="min-w-[800px]">
-          <TableHeadCustom headLabel={TABLE_HEAD} rowCount={tableData.length} />
+          <TableHeadCustom headLabel={TABLE_HEAD} rowCount={offers?.length} />
 
           <tbody>
-            {tableData.map((row) => (
-              <OffersTableRow
-                key={row.id}
-                row={row}
-                onDeleteRow={() => handleDeleteRow(row.id)}
-                onEditRow={() => handleEditRow(row.id)}
-                onViewRow={() => handleViewRow(row.id)}
-              />
-            ))}
-            {/*
-            <TableEmptyRows height={60} emptyRows={tableData.length} /> */}
-
-            <TableNoData isNotFound={tableData.length < 1} />
+            {!isLoading &&
+              offers?.map((row) => (
+                <OffersTableRow
+                  key={row.id}
+                  row={row}
+                  onDeleteRow={() => handleDeleteRow(row.id)}
+                  onEditRow={() => handleEditRow(row.id)}
+                  onViewRow={() => handleViewRow(row.id)}
+                />
+              ))}
+            <TableNoData
+              isNotFound={offers?.length < 1 || offers === undefined}
+            />
           </tbody>
         </table>
       </TableResponsiveWrap>

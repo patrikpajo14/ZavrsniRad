@@ -7,35 +7,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "@/components/forms/Select";
 import FormProvider from "@/components/forms/FormProvider";
-import { toast } from "react-hot-toast";
 import RadioGroup from "@/components/forms/RadioGroup";
-import { useGetColors } from "@/app/actions/GetColors";
-import { useGetPanels } from "@/app/actions/GetPanels";
-import { useGetExtrasType } from "@/app/actions/GetExtrasType";
-import { useGetBlindsType } from "@/app/actions/GetBlindsType";
-import { useGetArticleType } from "@/app/actions/GetArticleTypes";
-import axios from "axios";
-import {
-  useAddArticle,
-  useGetArticles,
-  useUpdateArticle,
-} from "@/app/actions/GetArticles";
+import { useAddArticle, useUpdateArticle } from "@/app/actions/GetArticles";
+import { useGetArticleFormParams } from "@/app/actions/GetArticleFormParams";
 
 export default function ArticleForm({ isEdit = false, article }) {
-  const colors = useGetColors();
-  const panels = useGetPanels();
-  const extrasTypes = useGetExtrasType();
-  const blindsTypes = useGetBlindsType();
-  const types = useGetArticleType();
+  const { data: formParams, isLoading: paramsLoading } =
+    useGetArticleFormParams();
 
-  const articleExtras = extrasTypes?.data?.find((extras) => {
-    return extras?.id === article?.extrasId;
-  });
-  const articleBlinds = blindsTypes?.data?.find((blinds) => {
-    return blinds?.id === article?.blindsId;
-  });
+  console.log(!paramsLoading && formParams);
 
-  const { refetch, isLoading } = useGetArticles();
+  const { types, panels, colors, blindsTypes, extrasTypes } = formParams;
 
   const { mutate: addArticle } = useAddArticle();
   const { mutate: updateArticle } = useUpdateArticle();
@@ -53,13 +35,21 @@ export default function ArticleForm({ isEdit = false, article }) {
     blindsTypeId: haveBlinds
       ? Yup.string().required("Required")
       : Yup.string().notRequired(),
-    blindsWidth: Yup.number().required("Required"),
-    blindsHeight: Yup.number().required("Required"),
-    extrasTypeId: haveBlinds
+    blindsWidth: haveBlinds
+      ? Yup.number().required("Required")
+      : Yup.number().notRequired(),
+    blindsHeight: haveBlinds
+      ? Yup.number().required("Required")
+      : Yup.number().notRequired(),
+    extrasTypeId: haveExtras
       ? Yup.string().required("Required")
       : Yup.string().notRequired(),
-    extrasWidth: Yup.number().required("Required"),
-    extrasHeight: Yup.number().required("Required"),
+    extrasWidth: haveExtras
+      ? Yup.number().required("Required")
+      : Yup.number().notRequired(),
+    extrasHeight: haveExtras
+      ? Yup.number().required("Required")
+      : Yup.number().notRequired(),
     price: Yup.number().required("Required"),
     amount: Yup.number().required("Required"),
   });
@@ -101,11 +91,11 @@ export default function ArticleForm({ isEdit = false, article }) {
   useEffect(() => {
     if (isEdit && article) {
       reset(defaultValues);
-      articleBlinds?.id === "648ec585f8b656a025269d84"
+      article?.blinds?.name === "none"
         ? setHaveBlinds(false)
         : setHaveBlinds(true);
 
-      articleExtras?.id === "648ec57ff8b656a025269d82"
+      article?.extras?.name === "none"
         ? setHaveExtras(false)
         : setHaveExtras(true);
     }
@@ -120,22 +110,12 @@ export default function ArticleForm({ isEdit = false, article }) {
     try {
       setLoading(true);
       if (isEdit && article) {
-        /* axios
-          .put(`/api/article/${article.id}`, data)
-          .then((callback) => {
-            if (callback?.status === 200) {
-              toast.success("Article updated");
-            }
-          })
-          .catch((error) => toast.error(error.response.data))
-          .finally(() => setLoading(false)); */
         updateArticle({ id: article.id, body: data });
       }
       if (!isEdit) {
         addArticle(data);
       }
       reset();
-      refetch();
       console.log("DATA", data);
     } catch (error) {
       console.error(error);
@@ -157,7 +137,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {types.data?.map((option, index) => (
+              {types?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -171,7 +151,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {panels.data?.map((option, index) => (
+              {panels?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -206,7 +186,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {colors.data?.map((option, index) => (
+              {colors?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -264,7 +244,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   errors={errors}
                   register={register}
                 >
-                  {blindsTypes.data.map((option, index) => (
+                  {blindsTypes?.map((option, index) => (
                     <option key={index} value={option.id}>
                       {option.name}
                     </option>
@@ -319,7 +299,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   errors={errors}
                   register={register}
                 >
-                  {extrasTypes.data.map((option, index) => (
+                  {extrasTypes?.map((option, index) => (
                     <option key={index} value={option.id}>
                       {option.name}
                     </option>

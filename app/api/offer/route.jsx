@@ -10,56 +10,78 @@ export async function POST(request) {
 
   const currentUser = await getCurrentUser();
 
-  const place = await prisma.place.findUnique({
+  const existPlace = await prisma.places.findUnique({
     where: {
-      name: city,
+      place_name: city,
     },
   });
 
-  console.log(place);
+  const place =
+    !existPlace &&
+    (await prisma.places.create({
+      data: {
+        place_name: city,
+      },
+    }));
 
   if (!customerName || !address || !phone || !email || !city) {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
-  /*  const offer = await prisma.offer.create({
+  const offer = await prisma.offer.create({
     data: {
       customer_name: customerName,
       customer_address: address,
       customer_phone_number: phone,
       customer_email: email,
-      opening: opening,
-      substock: substock,
-      price: price,
-      type: {
-        connect: { id: typeId },
+      status: "Pending",
+      place: {
+        connect: {
+          id: existPlace ? existPlace.id : place.id,
+        },
       },
-      panel: {
-        connect: { id: panelId },
+      user: {
+        connect: {
+          id: currentUser.id,
+        },
       },
-      color: {
-        connect: { id: colorId },
+      articles: {
+        connect: articles.map((article) => ({
+          id: article.id,
+        })),
       },
-      blinds: {
-        connect: { id: blindsTypeId },
-      },
-      blindsWidth: blindsWidth,
-      blindsHeight: blindsHeight,
-      extras: {
-        connect: { id: extrasTypeId },
-      },
-      extrasWidth: extrasWidth,
-      extrasHeight: extrasHeight,
+      articleList: articles,
     },
-  }); */
+    include: {
+      place: true,
+      articles: true,
+    },
+  });
 
-  return NextResponse.json(data);
+  console.log(offer);
+
+  return NextResponse.json(offer);
 }
 
 export async function GET() {
   try {
-    const articles = await prisma.article.findMany();
-    return NextResponse.json(articles);
+    const offers = await prisma.offer.findMany();
+
+    const body = await Promise.all(
+      offers.map(async (offer) => {
+        const total = offer.articleList.reduce(
+          (sum, article) => sum + article.price * article.amount,
+          0
+        );
+
+        return {
+          ...offer,
+          total: total,
+        };
+      })
+    );
+
+    return NextResponse.json(body);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });
   }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 const fetchParams = async () => {
   const types = await axios.get(`/api/articleType`);
@@ -23,6 +23,7 @@ export const useGetArticleFormParams = () => {
   return useQuery(["article-form"], () => fetchParams(), {
     refetchOnWindowFocus: false,
     keepPreviousData: true,
+    staleTime: 3600000,
     select: (data) => {
       return data.data;
     },

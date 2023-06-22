@@ -1,3 +1,5 @@
+import Loader from "@/components/Loader/Loader";
+
 export default function Loading() {
-  return <h3>Loading...</h3>;
+  return <Loader sx={"h-[500px]"} />;
 }
