@@ -5,7 +5,7 @@ import PageSubheader from "@/components/PageSubheader";
 import ArticleForm from "@/components/article/ArticleForm";
 import React, { useState } from "react";
 
-const ArticleListHeader = ({refetch}) => {
+const ArticleListHeader = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const handleCloseDrawer = () => {
@@ -26,7 +26,7 @@ const ArticleListHeader = ({refetch}) => {
         onClose={handleCloseDrawer}
         title={"Create article"}
       >
-        <ArticleForm closeEvent={handleCloseDrawer} refetch={refetch} />
+        <ArticleForm closeEvent={handleCloseDrawer} />
       </CustomDrawer>
     </>
   );

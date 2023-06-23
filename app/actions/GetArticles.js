@@ -6,8 +6,20 @@ const fetchArticles = () => {
   return axios.get("/api/article");
 };
 
+const fetchCustomArticle = () => {
+  return axios.get("/api/article");
+};
+
 export const useGetArticles = () => {
   return useQuery("articles", fetchArticles, {
+    select: (data) => {
+      return data.data;
+    },
+  });
+};
+
+export const useGetCustomArticles = () => {
+  return useQuery("articles", fetchCustomArticle, {
     select: (data) => {
       return data.data;
     },
@@ -29,6 +41,7 @@ export const useAddArticle = () => {
           data: [...oldQueryData.data, data.data],
         };
       });
+      queryClient.invalidateQueries("articles");
     },
     onError: () => {
       toast.error("Creating article failed!");

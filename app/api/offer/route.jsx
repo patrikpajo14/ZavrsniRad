@@ -34,7 +34,7 @@ export async function POST(request) {
       customer_address: address,
       customer_phone_number: phone,
       customer_email: email,
-      status: "Pending",
+      status: "pending",
       place: {
         connect: {
           id: existPlace ? existPlace.id : place.id,
@@ -65,7 +65,14 @@ export async function POST(request) {
 
 export async function GET() {
   try {
-    const offers = await prisma.offer.findMany();
+    const offers = await prisma.offer.findMany({
+      include: {
+        place: true,
+      },
+      orderBy: {
+        create_date: "desc",
+      },
+    });
 
     const body = await Promise.all(
       offers.map(async (offer) => {

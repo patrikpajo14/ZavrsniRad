@@ -1,13 +1,20 @@
 "use client";
 import React from "react";
 import {
+  TableEmptyRows,
   TableHeadCustom,
   TableNoData,
   TableResponsiveWrap,
 } from "@/components/table";
 import { useRouter } from "next/navigation";
 import OffersTableRow from "./OffersTableRow";
-import { useGetOffers } from "@/app/actions/GetOffers";
+import {
+  useDeleteOffer,
+  useGetLimitOffers,
+  useGetOffers,
+} from "@/app/actions/GetOffers";
+import Link from "next/link";
+import Image from "next/image";
 
 const TABLE_HEAD = [
   { id: "id", label: "ID", align: "left" },
@@ -19,14 +26,18 @@ const TABLE_HEAD = [
   { id: "", label: "Options", align: "right" },
 ];
 
-export default function OffersTable() {
+export default function OffersTable({ limit }) {
   const { push } = useRouter();
 
-  const { data: offers, isLoading } = useGetOffers();
+  const { data: offers, isLoading } = !limit
+    ? useGetOffers()
+    : useGetLimitOffers(limit);
 
-  console.log(!isLoading && offers);
+  const { mutate: deleteOffer } = useDeleteOffer();
 
-  const handleDeleteRow = (id) => {};
+  const handleDeleteRow = (id) => {
+    deleteOffer(id);
+  };
 
   const handleEditRow = (id) => {
     push(`/dashboard/offers/${id}`);
@@ -56,12 +67,32 @@ export default function OffersTable() {
                   onViewRow={() => handleViewRow(row.id)}
                 />
               ))}
+            <TableEmptyRows
+              emptyRows={!isLoading ? 5 - offers?.length : 0}
+              height={!isLoading && offers?.length < 5 ? 60 : 0}
+            />
             <TableNoData
               isNotFound={offers?.length < 1 || offers === undefined}
+              title={isLoading ? "Table is loading..." : "No data in table"}
             />
           </tbody>
         </table>
       </TableResponsiveWrap>
+      {limit && (
+        <div className="p-4 flex justify-end">
+          <div className="flex gap-2">
+            <Link href={"/dashboard/offers"} className="text-sm">
+              View all
+            </Link>
+            <Image
+              src={"/assets/icons/ico_arrow.svg"}
+              alt="arrow"
+              width={12}
+              height={12}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

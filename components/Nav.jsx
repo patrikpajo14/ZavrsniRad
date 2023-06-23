@@ -13,7 +13,7 @@ const Nav = () => {
 
   return (
     <nav className="flex-col-reverse flex md:flex-row gap-3 flex-end md:items-center w-full mb-7 md:mb-16 pt-3">
-      <div className="flex justify-between">
+      <div className="flex justify-between w-[100%] md:w-max">
         <button
           className="block md:hidden"
           onClick={() => {

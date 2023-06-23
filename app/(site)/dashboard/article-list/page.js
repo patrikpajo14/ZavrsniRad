@@ -14,6 +14,8 @@ const ArticleListPage = () => {
     return <div>Error fetching data</div>;
   }
 
+  console.log(data);
+
   return (
     <section>
       <ArticleListHeader />

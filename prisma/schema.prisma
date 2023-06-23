@@ -43,6 +43,12 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+  model Places{
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    place_name String  @unique
+    offers     Offer[]
+ }
+
 model Offer{
   id                    String @id @default(auto()) @map("_id") @db.ObjectId
   customer_name         String
@@ -59,12 +65,6 @@ model Offer{
   articleIDs            String[] @db.ObjectId
   articles              Article[]   @relation(fields: [articleIDs], references: [id])
   articleList           Json[] @default([])
- }
-
-  model Places{
-    id         String  @id @default(auto()) @map("_id") @db.ObjectId
-    place_name String  @unique
-    offers     Offer[]
  }
 
 model Article{

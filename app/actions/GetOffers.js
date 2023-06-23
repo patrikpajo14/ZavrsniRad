@@ -14,6 +14,29 @@ export const useGetOffers = () => {
   });
 };
 
+const fetchLimitedOffers = (limit) => {
+  return axios.get(`/api/offer?_limit=${limit}`);
+};
+
+export const useGetLimitOffers = (limit) => {
+  const queryClient = useQueryClient();
+  return useQuery(["offers", limit], () => fetchLimitedOffers(limit), {
+    keepPreviousData: true,
+    initialData: () => {
+      const offers = queryClient.getQueryData("offers")?.data?.slice(0, limit);
+
+      if (offers) {
+        return offers;
+      } else {
+        return undefined;
+      }
+    },
+    select: (data) => {
+      return data.data;
+    },
+  });
+};
+
 const addOffer = (offer) => {
   return axios.post("/api/offer", offer);
 };
@@ -45,6 +68,26 @@ export const useUpdateOffer = () => {
       toast.success("offer Updated!");
       queryClient.invalidateQueries("offers");
     },
+    onError: () => {
+      toast.error("offer Update failed!");
+    },
+  });
+};
+
+const updateOfferStatus = (data) => {
+  console.log("IZ FORMUNE", data);
+  return axios.put(`/api/offer/status`, data);
+};
+
+export const useUpdateOfferStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateOfferStatus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("offers");
+    },
+    onError: () => {
+      toast.error("Status change failed!");
+    },
   });
 };
 
@@ -53,9 +96,39 @@ const fetchOffersById = (id) => {
 };
 
 export const useGetOffersById = (id) => {
+  const queryClient = useQueryClient();
   return useQuery(["offer", id], () => fetchOffersById(id), {
+    initialData: () => {
+      const offer = queryClient
+        .getQueryData("offers")
+        ?.data?.find((offer) => offer.id === id);
+
+      if (offer) {
+        return { data: offer };
+      } else {
+        return undefined;
+      }
+    },
     select: (data) => {
       return data.data;
+    },
+  });
+};
+
+const deleteOffer = (id) => {
+  return axios.delete(`/api/offer/${id}`);
+};
+
+export const useDeleteOffer = () => {
+  const queryClient = useQueryClient();
+  return useMutation((id) => deleteOffer(id), {
+    onSuccess: () => {
+      toast.success("Offer deleted successfuly!");
+      queryClient.invalidateQueries("articles");
+      queryClient.invalidateQueries("offers");
+    },
+    onError: () => {
+      toast.error("Something went wrong!");
     },
   });
 };

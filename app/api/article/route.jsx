@@ -83,52 +83,16 @@ export async function POST(request) {
 
 export async function GET() {
   try {
-    const articles = await prisma.article.findMany();
-
-    const body = await Promise.all(
-      articles.map(async (article) => {
-        const type = await prisma.type.findUnique({
-          where: {
-            id: article.typeId,
-          },
-        });
-
-        const panel = await prisma.panel.findUnique({
-          where: {
-            id: article.panelId,
-          },
-        });
-
-        const color = await prisma.color.findUnique({
-          where: {
-            id: article.colorId,
-          },
-        });
-
-        const blinds = await prisma.blindsType.findUnique({
-          where: {
-            id: article.blindsId,
-          },
-        });
-
-        const extras = await prisma.netsType.findUnique({
-          where: {
-            id: article.extrasId,
-          },
-        });
-
-        return {
-          ...article,
-          type: type,
-          color: color,
-          panel: panel,
-          blinds: blinds,
-          extras: extras,
-        };
-      })
-    );
-
-    return NextResponse.json(body);
+    const articles = await prisma.article.findMany({
+      include: {
+        type: true,
+        panel: true,
+        color: true,
+        blinds: true,
+        extras: true,
+      },
+    });
+    return NextResponse.json(articles);
   } catch (error) {
     return NextResponse.json({ message: "Error", error }, { status: 500 });
   }

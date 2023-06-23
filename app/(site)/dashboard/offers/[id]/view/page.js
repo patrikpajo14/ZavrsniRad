@@ -7,6 +7,7 @@ import ArticleLIst from "@/components/article/ArticleLIst";
 import Link from "next/link";
 import { useGetOffersById } from "@/app/actions/GetOffers";
 import Loader from "@/components/Loader/Loader";
+import { format, parseISO } from "date-fns";
 
 const OfferView = () => {
   const params = useParams();
@@ -16,11 +17,15 @@ const OfferView = () => {
   return (
     <section className="max-h-[calc(100vh - 50px)]">
       <PageSubheader
-        title={`Edit offer ${params.id}`}
+        title={`Preview offer: ${params.id}`}
         body={
           <div className="flex gap-4 items-center">
             <div>
-              <p>13.06.2023</p>
+              <p>
+                {!isLoading
+                  ? format(parseISO(offer?.create_date), "dd.MM.yyyy")
+                  : ""}
+              </p>
             </div>
             <Link
               href={`/dashboard/offers/${params.id}`}
@@ -46,6 +51,9 @@ const OfferView = () => {
             <p>Phone: {offer?.customer_phone_number}</p>
             <p>Email: {offer?.customer_email}</p>
             <p>Address: {offer?.customer_address}</p>
+            <p className="font-bold text-[18px]">
+              Total price: {offer?.total} €
+            </p>
           </div>
 
           <div>

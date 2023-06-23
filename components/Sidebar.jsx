@@ -43,6 +43,7 @@ const Sidebar = () => {
               <li className="relative" key={index}>
                 <Link
                   href={`/dashboard/${link}`}
+                  onClick={() => {document.body.classList.remove("sidebar-open")}}
                   className={isActive ? "sidebar-link active" : "sidebar-link"}
                 >
                   <Image

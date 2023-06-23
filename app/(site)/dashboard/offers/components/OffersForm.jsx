@@ -9,15 +9,32 @@ import Select from "@/components/forms/Select";
 import FormProvider from "@/components/forms/FormProvider";
 import { toast } from "react-hot-toast";
 import { useGetArticles } from "@/app/actions/GetArticles";
-import ArticleLIst from "@/components/article/ArticleLIst";
 import Article from "@/components/article/Article";
 import axios from "axios";
+import ArticleForm from "@/components/article/ArticleForm";
+import CustomDrawer from "@/components/CustomDrawer";
+import { useAddOffer, useUpdateOffer } from "@/app/actions/GetOffers";
 
 const OffersForm = ({ isEdit = false, offer }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedArticles, setSelectedArticles] = useState([]);
+  const [selectedArticles, setSelectedArticles] = useState(
+    offer ? offer.articleList : []
+  );
+  const [customArticles, setCustomArticles] = useState([]);
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
+
+  const handleOpenDrawer = () => {
+    setOpenDrawer(true);
+  };
 
   const articles = useGetArticles();
+
+  const { mutate: updateOffer } = useUpdateOffer();
+  const { mutate: addOffer } = useAddOffer();
 
   const OffersSchema = Yup.object().shape({
     customerName: Yup.string().required("Required"),
@@ -29,11 +46,11 @@ const OffersForm = ({ isEdit = false, offer }) => {
 
   const defaultValues = useMemo(
     () => ({
-      customerName: offer?.customerName || "",
-      address: offer?.address || "",
-      address: offer?.city || "",
-      email: offer?.email || "",
-      phone: offer?.phone || "",
+      customerName: offer?.customer_name || "",
+      address: offer?.customer_address || "",
+      city: offer?.place?.place_name || "",
+      email: offer?.customer_email || "",
+      phone: offer?.customer_phone_number || "",
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [offer]
@@ -82,6 +99,14 @@ const OffersForm = ({ isEdit = false, offer }) => {
     }
   };
 
+  const handleCreateCustomArticle = () => {
+    /*     console.log("LAST ARTICLE", articles?.data.pop());
+    setCustomArticles(...customArticles, articles?.data.pop());
+    setSelectedArticles([...selectedArticles, articles?.data.pop()]); */
+  };
+
+  // console.log("Custom ARticle", customArticles);
+
   const handleDeleteArticle = (id) => {
     const deleteRow = selectedArticles.filter((row) => row.id !== id);
     setSelectedArticles(deleteRow);
@@ -95,32 +120,13 @@ const OffersForm = ({ isEdit = false, offer }) => {
         data: data,
         articles: selectedArticles,
       };
-      const place = {
-        name: data.city,
-      };
-      setSelectedArticles([]);
 
       if (isEdit && offer) {
-        /*         axios
-          .put(`/api/article/${article.id}`, data)
-          .then((callback) => {
-            if (callback?.status === 200) {
-              toast.success("Offer is updated successfuly");
-            }
-          })
-          .catch((error) => toast.error(error.response.data))
-          .finally(() => setLoading(false)); */
+        updateOffer({ id: offer.id, body: body });
       }
       if (!isEdit) {
-        axios
-          .post("/api/offer", body)
-          .then((callback) => {
-            if (callback?.status === 200) {
-              toast.success("Offer is created successfuly");
-            }
-          })
-          .catch((error) => toast.error(error.response.data))
-          .finally(() => setIsLoading(false));
+        addOffer(body);
+        setSelectedArticles([]);
       }
       reset();
       console.log("DATA", body);
@@ -199,14 +205,19 @@ const OffersForm = ({ isEdit = false, offer }) => {
             </Select>
 
             <div className="flex flex-col justify-end pt-2 sm:p-0">
-              <Button secondary disabled={isLoading} fullWidth>
+              <Button
+                secondary
+                disabled={isLoading}
+                onClick={handleOpenDrawer}
+                fullWidth
+              >
                 Custom article
               </Button>
             </div>
 
             <div className="flex flex-col justify-end pt-2 sm:p-0">
               <Button disabled={isLoading} fullWidth type="submit">
-                Create offer
+                {isEdit ? "Update offer" : "Create offer"}
               </Button>
             </div>
           </div>
@@ -215,15 +226,26 @@ const OffersForm = ({ isEdit = false, offer }) => {
       <div className="mt-7">
         {selectedArticles?.map((article) => (
           <Article
-            key={article.id}
+            key={article?.id}
             article={article}
             offerItem={true}
             onDelete={() => {
-              handleDeleteArticle(article.id);
+              handleDeleteArticle(article?.id);
             }}
           />
         ))}
       </div>
+
+      <CustomDrawer
+        isOpened={openDrawer}
+        onClose={handleCloseDrawer}
+        title={"Create article"}
+      >
+        <ArticleForm
+          forOffer="true"
+          createCustomArticle={handleCreateCustomArticle}
+        />
+      </CustomDrawer>
     </>
   );
 };

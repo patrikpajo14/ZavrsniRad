@@ -8,6 +8,9 @@ export async function GET(request, { params }) {
       where: {
         id: id,
       },
+      include: {
+        place: true,
+      },
     });
 
     const total = offer.articleList.reduce(
@@ -28,45 +31,84 @@ export async function DELETE(request, { params }) {
   try {
     const { id } = params;
 
-    // Find the offers that reference the article
-    const updatedOffers = await prisma.offer.updateMany({
+    const articles = await prisma.article.findMany({
       where: {
-        articleIDs: {
-          contains: id,
+        offersIDs: {
+          has: id,
         },
       },
+    });
+
+    // Update the articles
+    const updatePromises = articles.map((article) =>
+      prisma.article.update({
+        where: {
+          id: article.id,
+        },
+        data: {
+          offersIDs: {
+            set: article.offersIDs.filter((ID) => ID !== id),
+          },
+        },
+      })
+    );
+
+    const updatedArticles = await Promise.all(updatePromises);
+
+    const deletedOffer = await prisma.offer.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return NextResponse.json(deletedOffer);
+  } catch (error) {
+    return NextResponse.json(null);
+  }
+}
+
+export async function PUT(request, { params }) {
+  try {
+    const { id } = params;
+    const body = await request.json();
+
+    const { articles, data } = body;
+
+    const { customerName, address, phone, email, city } = data;
+
+    const existPlace = await prisma.places.findUnique({
+      where: {
+        place_name: city,
+      },
+    });
+
+    const place =
+      !existPlace &&
+      (await prisma.places.create({
+        data: {
+          place_name: city,
+        },
+      }));
+
+    const updatedOffer = await prisma.offer.update({
       data: {
-        articleIDs: {
-          set: [],
+        customer_name: customerName,
+        customer_address: address,
+        customer_phone_number: phone,
+        customer_email: email,
+        place: {
+          connect: {
+            id: existPlace ? existPlace.id : place.id,
+          },
         },
+        articleList: articles,
       },
-    });
-
-    console.log(updatedOffers);
-
-    // Update the offers by removing the article ID from the articleIDs array
-    /*    const updatePromises = offers.map((offer) => {
-        const updatedArticleIDs = offer.articleIDs.filter(
-          (articleId) => articleId !== id
-        );
-  
-        return prisma.offer.update({
-          where: {
-            id: offer.id,
-          },
-          data: {
-            articleIDs: updatedArticleIDs,
-          },
-        });
-      }); */
-
-    const deletedArticle = await prisma.article.delete({
       where: {
-        id: aid,
+        id: id,
       },
     });
 
-    return NextResponse.json(deletedArticle);
+    return NextResponse.json(updatedOffer);
   } catch (error) {
     return NextResponse.json(null);
   }

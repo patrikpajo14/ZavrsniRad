@@ -5,33 +5,37 @@ export async function DELETE(request, { params }) {
   try {
     const { id } = params;
 
-    const deletedArticle = await prisma.article.findUnique({
+    const offers = await prisma.offer.findMany({
+      where: {
+        articleIDs: {
+          has: id,
+        },
+      },
+    });
+
+    // Update the offers
+    const updatePromises = offers.map((offer) =>
+      prisma.offer.update({
+        where: {
+          id: offer.id,
+        },
+        data: {
+          articleIDs: {
+            set: offer.articleIDs.filter((ID) => ID !== id),
+          },
+        },
+      })
+    );
+
+    const updatedOffers = await Promise.all(updatePromises);
+
+    const deletedArticle = await prisma.article.delete({
       where: {
         id: id,
       },
-      include: { offers: true },
     });
 
     console.log(deletedArticle);
-
-    const offerIdsToUpdate = deletedArticle.offersIDs;
-
-    console.log(offerIdsToUpdate);
-
-    for (const offerId of offerIdsToUpdate) {
-      console.log(offerId);
-      await prisma.offer.update({
-        where: { id: offerId },
-        data: {
-          ...data,
-          articleIDs: {
-            set: ["nista"],
-          },
-        },
-      });
-    }
-
-    console.log("kraj");
 
     return NextResponse.json(deletedArticle);
   } catch (error) {

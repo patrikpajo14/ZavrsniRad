@@ -11,13 +11,19 @@ import RadioGroup from "@/components/forms/RadioGroup";
 import { useAddArticle, useUpdateArticle } from "@/app/actions/GetArticles";
 import { useGetArticleFormParams } from "@/app/actions/GetArticleFormParams";
 
-export default function ArticleForm({ isEdit = false, article }) {
-  const { data: formParams, isLoading: paramsLoading } =
-    useGetArticleFormParams();
+export default function ArticleForm({
+  isEdit = false,
+  forOffer = false,
+  article,
+  createCustomArticle,
+}) {
+  const {
+    data: formParams,
+    isLoading: paramsLoading,
+    isFetching,
+  } = useGetArticleFormParams();
 
   console.log(!paramsLoading && formParams);
-
-  const { types, panels, colors, blindsTypes, extrasTypes } = formParams;
 
   const { mutate: addArticle } = useAddArticle();
   const { mutate: updateArticle } = useUpdateArticle();
@@ -107,21 +113,32 @@ export default function ArticleForm({ isEdit = false, article }) {
 
   const onSubmit = async (data) => {
     console.log("DATA", data);
-    try {
-      setLoading(true);
-      if (isEdit && article) {
-        updateArticle({ id: article.id, body: data });
+    if (!forOffer) {
+      try {
+        setLoading(true);
+        if (isEdit && article) {
+          updateArticle({ id: article.id, body: data });
+        }
+        if (!isEdit) {
+          addArticle(data);
+        }
+        console.log("DATA", data);
+      } catch (error) {
+        console.error(error);
       }
-      if (!isEdit) {
-        addArticle(data);
-      }
-      reset();
-      console.log("DATA", data);
-    } catch (error) {
-      console.error(error);
+    } else {
+      /*       addArticle(data);
+      setTimeout(() => {
+        createCustomArticle();
+      }, 2000); */
     }
+    reset();
     setLoading(false);
   };
+
+  if (paramsLoading || isFetching) {
+    return <div>Loading</div>;
+  }
 
   return (
     <>
@@ -137,7 +154,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {types?.map((option, index) => (
+              {formParams?.types?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -151,7 +168,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {panels?.map((option, index) => (
+              {formParams?.panels?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -186,7 +203,7 @@ export default function ArticleForm({ isEdit = false, article }) {
               errors={errors}
               register={register}
             >
-              {colors?.map((option, index) => (
+              {formParams?.colors?.map((option, index) => (
                 <option key={index} value={option.id}>
                   {option.name}
                 </option>
@@ -244,7 +261,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   errors={errors}
                   register={register}
                 >
-                  {blindsTypes?.map((option, index) => (
+                  {formParams?.blindsTypes?.map((option, index) => (
                     <option key={index} value={option.id}>
                       {option.name}
                     </option>
@@ -299,7 +316,7 @@ export default function ArticleForm({ isEdit = false, article }) {
                   errors={errors}
                   register={register}
                 >
-                  {extrasTypes?.map((option, index) => (
+                  {formParams?.extrasTypes?.map((option, index) => (
                     <option key={index} value={option.id}>
                       {option.name}
                     </option>

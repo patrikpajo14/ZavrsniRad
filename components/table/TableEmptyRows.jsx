@@ -11,7 +11,7 @@ export default function TableEmptyRows({ emptyRows, height }) {
         }),
       }}
     >
-      <td colSpan={9}/>
+      <td className="p-0" colSpan={9} />
     </tr>
   );
 }
