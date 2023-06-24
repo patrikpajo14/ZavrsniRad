@@ -13,7 +13,7 @@ const Avatar = ({ user, onClick }) => {
           className="rounded-full cursor-pointer"
         />
       ) : (
-        <div className="avatar">{user?.name.charAt(0)}</div>
+        <div className="avatar">{user?.name?.charAt(0)}</div>
       )}
     </div>
   );

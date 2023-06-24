@@ -73,7 +73,9 @@ export default function OffersTable({ limit }) {
                     />
                   ))}
             <TableEmptyRows
-              emptyRows={!isLoading ? 5 - offers?.length : 0}
+              emptyRows={
+                !isLoading && offers?.lenght > 0 ? 5 - offers?.length : 0
+              }
               height={!isLoading && offers?.length < 5 ? 60 : 0}
             />
             <TableNoData

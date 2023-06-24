@@ -48,7 +48,7 @@ const AdministrationForm = ({ title, inputLabel, btnText, url }) => {
         .catch((error) => toast.error(error.response.data))
         .finally(() => setIsLoading(false));
       reset();
-      console.log("DATA", data);
+      // console.log("DATA", data);
     } catch (error) {
       toast.error(error.message);
     }

@@ -117,7 +117,6 @@ export default function ArticleForm({
   }, [isEdit, article]);
 
   const onSubmit = async (data) => {
-    console.log("DATA", data);
     if (!forOffer) {
       try {
         setLoading(true);
@@ -127,14 +126,13 @@ export default function ArticleForm({
         if (!isEdit) {
           addArticle(data);
         }
-        console.log("DATA", data);
+        // console.log("DATA", data);
       } catch (error) {
         console.error(error);
       }
     } else {
       if (!idLoading) {
         const id = objectId;
-        console.log(id);
         const type = formParams.types.find((type) => {
           return type.id === data.typeId;
         });

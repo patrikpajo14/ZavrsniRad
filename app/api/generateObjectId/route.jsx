@@ -6,7 +6,6 @@ export async function GET() {
     const objectId = new ObjectId();
     const randomId = Math.random().toString(36).substring(2, 4);
     const exportId = `${objectId.toString().slice(0, 22)}${randomId}`;
-    console.log(exportId);
 
     return NextResponse.json({ objectId: exportId });
   } catch (error) {

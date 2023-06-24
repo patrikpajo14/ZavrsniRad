@@ -34,7 +34,6 @@ export const useAddOffer = () => {
 };
 
 const updateOffer = (data) => {
-  console.log("IZ FORMUNE", data.body);
   return axios.put(`/api/offer/${data.id}`, data.body);
 };
 
@@ -52,7 +51,6 @@ export const useUpdateOffer = () => {
 };
 
 const updateOfferStatus = (data) => {
-  console.log("IZ FORMUNE", data);
   return axios.put(`/api/offer/status`, data);
 };
 

@@ -4,7 +4,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -27,9 +26,7 @@ export const authOptions = {
       async authorize(credentials) {
         // check to see if email and password is there
         if (!credentials.email || !credentials.password) {
-          return new NextResponse("Please enter an email and password", {
-            status: 500,
-          });
+          throw new Error("Please enter an email and password");
         }
 
         // check to see if user exists
@@ -41,7 +38,7 @@ export const authOptions = {
 
         // if no user was found
         if (!user || !user?.hashedPassword) {
-          return new NextResponse("No user found", { status: 500 });
+          throw new Error("No user found");
         }
 
         // check to see if password matches
@@ -52,7 +49,7 @@ export const authOptions = {
 
         // if password does not match
         if (!passwordMatch) {
-          return new NextResponse("Incorrect password", { status: 500 });
+          throw new Error("Incorrect password");
         }
 
         return user;
@@ -61,9 +58,6 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
-  },
-  pages: {
-    signIn: "/",
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",

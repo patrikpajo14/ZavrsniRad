@@ -15,12 +15,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <QueryProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <QueryProvider>
             <ToasterContext />
-            <main className="main">{children}</main>
-          </AuthProvider>
-        </QueryProvider>
+            <main className="main w-[100%] h-[100%]">{children}</main>
+          </QueryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -35,8 +35,6 @@ export async function DELETE(request, { params }) {
       },
     });
 
-    console.log(deletedArticle);
-
     return NextResponse.json(deletedArticle);
   } catch (error) {
     return NextResponse.json(null);
@@ -118,8 +116,6 @@ export async function PUT(request, { params }) {
         id: id,
       },
     });
-
-    console.log(article);
 
     return NextResponse.json(article);
   } catch (error) {

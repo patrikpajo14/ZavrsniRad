@@ -76,8 +76,6 @@ export async function POST(request) {
     },
   });
 
-  console.log(article);
-
   return NextResponse.json(article);
 }
 

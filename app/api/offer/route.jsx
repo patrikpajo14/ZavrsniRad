@@ -6,9 +6,6 @@ export async function POST(request) {
   const body = await request.json();
   const { articles, data, articleList } = body;
 
-  console.log("ARTICLES", articles.length);
-  console.log("ARTICLE LIST", articleList.length);
-
   const { customerName, address, phone, email, city } = data;
 
   const currentUser = await getCurrentUser();
@@ -61,14 +58,17 @@ export async function POST(request) {
     },
   });
 
-  console.log(offer);
-
   return NextResponse.json(offer);
 }
 
 export async function GET() {
   try {
+    const currentUser = await getCurrentUser();
+
     const offers = await prisma.offer.findMany({
+      where: {
+        user_id: currentUser.id,
+      },
       include: {
         place: true,
       },

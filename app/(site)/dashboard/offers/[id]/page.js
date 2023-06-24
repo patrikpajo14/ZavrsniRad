@@ -13,8 +13,6 @@ const EditOffer = () => {
 
   const { data: offer, isLoading } = useGetOffersById(params.id);
 
-  console.log(!isLoading && offer);
-
   return (
     <section className="max-h-[calc(100vh - 50px)]">
       <PageSubheader title={"Edit offer"} />

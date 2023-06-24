@@ -50,7 +50,6 @@ export const useAddArticle = () => {
 };
 
 const updateArticle = (data) => {
-  console.log("IZ FORMUNE", data.body);
   return axios.put(`/api/article/${data.id}`, data.body);
 };
 

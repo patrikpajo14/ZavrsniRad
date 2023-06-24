@@ -14,7 +14,6 @@ export default function RadioGroup({
 
   const onOptionChange = (e) => {
     setChecked(e.target.value);
-    console.log(e.target.value);
     try {
       handleOnChange !== undefined && handleOnChange();
     } catch (e) {
