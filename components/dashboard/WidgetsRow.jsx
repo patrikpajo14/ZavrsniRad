@@ -42,9 +42,9 @@ const WidgetsRow = () => {
         image="/assets/images/pending.png"
       />
       <SmallWidget
-        title="Offers Done"
-        number={offersDone.length}
-        image="/assets/images/done.png"
+        title="Rejecetd Offers"
+        number={offersRejected.length}
+        image="/assets/images/rejected.png"
       />
     </div>
   );
