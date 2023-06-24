@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const body = await request.json();
-  const { articles, data } = body;
+  const { articles, data, articleList } = body;
+
+  console.log("ARTICLES", articles.length);
+  console.log("ARTICLE LIST", articleList.length);
 
   const { customerName, address, phone, email, city } = data;
 
@@ -50,7 +53,7 @@ export async function POST(request) {
           id: article.id,
         })),
       },
-      articleList: articles,
+      articleList: articleList,
     },
     include: {
       place: true,

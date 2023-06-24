@@ -72,7 +72,7 @@ export async function PUT(request, { params }) {
     const { id } = params;
     const body = await request.json();
 
-    const { articles, data } = body;
+    const { articles, data, articleList } = body;
 
     const { customerName, address, phone, email, city } = data;
 
@@ -101,7 +101,7 @@ export async function PUT(request, { params }) {
             id: existPlace ? existPlace.id : place.id,
           },
         },
-        articleList: articles,
+        articleList: articleList,
       },
       where: {
         id: id,

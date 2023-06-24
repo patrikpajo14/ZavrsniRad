@@ -24,6 +24,9 @@ const ArticleListPage = () => {
           <Loader />
           <Loader />
           <Loader />
+          <Loader />
+          <Loader />
+          <Loader />
         </div>
       ) : (
         <>

@@ -29,8 +29,6 @@ const WidgetsRow = () => {
     return offer.status === "rejected";
   });
 
-  console.log(offersDone);
-
   return (
     <div className="grid grid-cols-1  sm:grid-cols-3 gap-2 md:gap-5 mb-2 md:mb-5">
       <WidgetWithGraph

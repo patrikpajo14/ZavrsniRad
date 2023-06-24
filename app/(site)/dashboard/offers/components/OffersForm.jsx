@@ -7,10 +7,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "@/components/forms/Select";
 import FormProvider from "@/components/forms/FormProvider";
-import { toast } from "react-hot-toast";
 import { useGetArticles } from "@/app/actions/GetArticles";
 import Article from "@/components/article/Article";
-import axios from "axios";
 import ArticleForm from "@/components/article/ArticleForm";
 import CustomDrawer from "@/components/CustomDrawer";
 import { useAddOffer, useUpdateOffer } from "@/app/actions/GetOffers";
@@ -21,6 +19,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
     offer ? offer.articleList : []
   );
   const [customArticles, setCustomArticles] = useState([]);
+  const [articleList, setArticleList] = useState([]);
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const handleCloseDrawer = () => {
@@ -78,6 +77,11 @@ const OffersForm = ({ isEdit = false, offer }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, offer]);
 
+  useEffect(() => {
+    setArticleList([...selectedArticles, ...customArticles]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedArticles, customArticles]);
+
   const handleOnSelect = (event) => {
     let tmpArticle = articles?.data?.find((article) => {
       return article?.id === event.target.value;
@@ -99,17 +103,17 @@ const OffersForm = ({ isEdit = false, offer }) => {
     }
   };
 
-  const handleCreateCustomArticle = () => {
-    /*     console.log("LAST ARTICLE", articles?.data.pop());
-    setCustomArticles(...customArticles, articles?.data.pop());
-    setSelectedArticles([...selectedArticles, articles?.data.pop()]); */
+  const handleCreateCustomArticle = (article) => {
+    setCustomArticles([...customArticles, article]);
   };
 
-  // console.log("Custom ARticle", customArticles);
-
   const handleDeleteArticle = (id) => {
-    const deleteRow = selectedArticles.filter((row) => row.id !== id);
-    setSelectedArticles(deleteRow);
+    const deleteRow = articleList.filter((row) => row.id !== id);
+    const deleteRowCustom = customArticles.filter((row) => row.id !== id);
+    const deleteRowSelected = selectedArticles.filter((row) => row.id !== id);
+    setArticleList(deleteRow);
+    setCustomArticles(deleteRowCustom);
+    setSelectedArticles(deleteRowSelected);
   };
 
   const onSubmit = async (data) => {
@@ -119,16 +123,20 @@ const OffersForm = ({ isEdit = false, offer }) => {
       const body = {
         data: data,
         articles: selectedArticles,
+        articleList: articleList,
       };
 
       if (isEdit && offer) {
         updateOffer({ id: offer.id, body: body });
+        setSelectedArticles([]);
       }
       if (!isEdit) {
         addOffer(body);
         setSelectedArticles([]);
+        setArticleList([]);
       }
       reset();
+      setCustomArticles([]);
       console.log("DATA", body);
     } catch (error) {
       console.error(error);
@@ -224,7 +232,7 @@ const OffersForm = ({ isEdit = false, offer }) => {
         </FormProvider>
       </div>
       <div className="mt-7">
-        {selectedArticles?.map((article) => (
+        {articleList?.map((article) => (
           <Article
             key={article?.id}
             article={article}

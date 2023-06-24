@@ -1,4 +1,5 @@
 import AuthForm from "@/components/AuthForm";
+import "@/styles/globals.css";
 
 export default async function Home() {
   return (

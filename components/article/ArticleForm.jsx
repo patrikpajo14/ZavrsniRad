@@ -10,6 +10,7 @@ import FormProvider from "@/components/forms/FormProvider";
 import RadioGroup from "@/components/forms/RadioGroup";
 import { useAddArticle, useUpdateArticle } from "@/app/actions/GetArticles";
 import { useGetArticleFormParams } from "@/app/actions/GetArticleFormParams";
+import { useGetObjectId } from "@/app/actions/GenerateObjectId";
 
 export default function ArticleForm({
   isEdit = false,
@@ -23,10 +24,14 @@ export default function ArticleForm({
     isFetching,
   } = useGetArticleFormParams();
 
-  console.log(!paramsLoading && formParams);
-
   const { mutate: addArticle } = useAddArticle();
   const { mutate: updateArticle } = useUpdateArticle();
+
+  const {
+    data: objectId,
+    isLoading: idLoading,
+    refetch: refetchId,
+  } = useGetObjectId();
 
   const [loading, setLoading] = useState(false);
   const [haveBlinds, setHaveBlinds] = useState(false);
@@ -127,10 +132,48 @@ export default function ArticleForm({
         console.error(error);
       }
     } else {
-      /*       addArticle(data);
-      setTimeout(() => {
-        createCustomArticle();
-      }, 2000); */
+      if (!idLoading) {
+        const id = objectId;
+        console.log(id);
+        const type = formParams.types.find((type) => {
+          return type.id === data.typeId;
+        });
+        const panel = formParams.panels.find(
+          (panel) => panel.id === data.panelId
+        );
+        const color = formParams.colors.find(
+          (color) => color.id === data.colorId
+        );
+        const blinds = formParams.blindsTypes.find((blinds) => {
+          if (data?.blindsTypeId === "") {
+            return blinds.name === "none";
+          } else {
+            blinds.id === data?.blindsTypeId;
+          }
+        });
+
+        const extras = formParams.extrasTypes.find((extras) => {
+          if (data?.extrasTypeId === "") {
+            return extras.name === "none";
+          } else {
+            extras.id === data?.blindsTypeId;
+          }
+        });
+
+        const name = type.name;
+        const customArticle = {
+          ...data,
+          id,
+          name,
+          type,
+          panel,
+          color,
+          blinds,
+          extras,
+        };
+        createCustomArticle(customArticle);
+        refetchId();
+      }
     }
     reset();
     setLoading(false);

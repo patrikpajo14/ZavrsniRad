@@ -14,29 +14,6 @@ export const useGetOffers = () => {
   });
 };
 
-const fetchLimitedOffers = (limit) => {
-  return axios.get(`/api/offer?_limit=${limit}`);
-};
-
-export const useGetLimitOffers = (limit) => {
-  const queryClient = useQueryClient();
-  return useQuery(["offers", limit], () => fetchLimitedOffers(limit), {
-    keepPreviousData: true,
-    initialData: () => {
-      const offers = queryClient.getQueryData("offers")?.data?.slice(0, limit);
-
-      if (offers) {
-        return offers;
-      } else {
-        return undefined;
-      }
-    },
-    select: (data) => {
-      return data.data;
-    },
-  });
-};
-
 const addOffer = (offer) => {
   return axios.post("/api/offer", offer);
 };

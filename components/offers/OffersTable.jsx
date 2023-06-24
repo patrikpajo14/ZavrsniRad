@@ -8,11 +8,7 @@ import {
 } from "@/components/table";
 import { useRouter } from "next/navigation";
 import OffersTableRow from "./OffersTableRow";
-import {
-  useDeleteOffer,
-  useGetLimitOffers,
-  useGetOffers,
-} from "@/app/actions/GetOffers";
+import { useDeleteOffer, useGetOffers } from "@/app/actions/GetOffers";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -29,9 +25,7 @@ const TABLE_HEAD = [
 export default function OffersTable({ limit }) {
   const { push } = useRouter();
 
-  const { data: offers, isLoading } = !limit
-    ? useGetOffers()
-    : useGetLimitOffers(limit);
+  const { data: offers, isLoading } = useGetOffers();
 
   const { mutate: deleteOffer } = useDeleteOffer();
 
@@ -57,16 +51,27 @@ export default function OffersTable({ limit }) {
           <TableHeadCustom headLabel={TABLE_HEAD} rowCount={offers?.length} />
 
           <tbody>
-            {!isLoading &&
-              offers?.map((row) => (
-                <OffersTableRow
-                  key={row.id}
-                  row={row}
-                  onDeleteRow={() => handleDeleteRow(row.id)}
-                  onEditRow={() => handleEditRow(row.id)}
-                  onViewRow={() => handleViewRow(row.id)}
-                />
-              ))}
+            {!isLoading && !limit
+              ? offers?.map((row) => (
+                  <OffersTableRow
+                    key={row.id}
+                    row={row}
+                    onDeleteRow={() => handleDeleteRow(row.id)}
+                    onEditRow={() => handleEditRow(row.id)}
+                    onViewRow={() => handleViewRow(row.id)}
+                  />
+                ))
+              : offers
+                  ?.slice(0, limit)
+                  ?.map((row) => (
+                    <OffersTableRow
+                      key={row.id}
+                      row={row}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.id)}
+                      onViewRow={() => handleViewRow(row.id)}
+                    />
+                  ))}
             <TableEmptyRows
               emptyRows={!isLoading ? 5 - offers?.length : 0}
               height={!isLoading && offers?.length < 5 ? 60 : 0}

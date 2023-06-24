@@ -13,7 +13,7 @@ const Dashboard = () => {
         body={
           <div className="flex gap-4 items-center">
             <Link href={"/dashboard/article-list"} className="outline_btn">
-              Articles
+              View Articles
             </Link>
             <Link href={"/dashboard/offers/create"} className="primary_btn">
               New offer
@@ -25,8 +25,6 @@ const Dashboard = () => {
       <WidgetsRow />
 
       <OffersTable limit={5} />
-
-      <PageLoader />
     </section>
   );
 };
