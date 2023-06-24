@@ -1,4 +1,3 @@
-import PageLoader from "@/components/PageLoader/PageLOader";
 import PageSubheader from "@/components/PageSubheader";
 import WidgetsRow from "@/components/dashboard/WidgetsRow";
 import { OffersTable } from "@/components/offers";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SmallWidget from "./smallWidget";
+import SmallWidget from "./SmallWidget";
 import { useGetOffers } from "@/app/actions/GetOffers";
 import WidgetWithGraph from "./WidgetWithGraph";
 import Loader from "../Loader/Loader";
