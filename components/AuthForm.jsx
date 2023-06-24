@@ -64,6 +64,7 @@ const AuthForm = () => {
 
           if (callback?.ok) {
             toast.success("User has been registered");
+            router.push("/dashboard");
           }
         })
         .catch(() => toast.error("Something went wrong!"))
@@ -82,6 +83,7 @@ const AuthForm = () => {
 
           if (callback?.ok && !callback?.error) {
             toast.success("Logged in successfully!");
+            router.push("/dashboard");
           }
         })
         .catch((error) => toast.error(error))
