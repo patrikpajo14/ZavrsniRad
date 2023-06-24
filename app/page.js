@@ -1,7 +1,5 @@
 import AuthForm from "@/components/AuthForm";
 import "@/styles/globals.css";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export default async function Home() {
   return (
@@ -11,12 +9,4 @@ export default async function Home() {
       </div>
     </section>
   );
-}
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      session: await getServerSession(context.req, context.res, authOptions),
-    },
-  };
 }
