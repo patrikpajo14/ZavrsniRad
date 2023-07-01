@@ -14,6 +14,8 @@ const OfferView = () => {
 
   const { data: offer, isLoading } = useGetOffersById(params.id);
 
+  console.log(offer);
+
   return (
     <section className="max-h-[calc(100vh - 50px)]">
       <PageSubheader
@@ -50,7 +52,9 @@ const OfferView = () => {
             <p>Name: {offer?.customer_name}</p>
             <p>Phone: {offer?.customer_phone_number}</p>
             <p>Email: {offer?.customer_email}</p>
-            <p>Address: {offer?.customer_address}</p>
+            <p>
+              Address: {offer?.customer_address}, {offer?.place?.place_name}
+            </p>
             <p className="font-bold text-[18px]">
               Total price: {offer?.total} €
             </p>

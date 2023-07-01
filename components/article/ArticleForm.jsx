@@ -261,7 +261,7 @@ export default function ArticleForm({
               required
               register={register}
               id="width"
-              label="Width"
+              label="Width (mm)"
               type="number"
             />
             <Input
@@ -270,7 +270,7 @@ export default function ArticleForm({
               required
               register={register}
               id="height"
-              label="Height"
+              label="Height (mm)"
               type="number"
             />
           </div>
@@ -314,7 +314,7 @@ export default function ArticleForm({
                   required
                   register={register}
                   id="blindsWidth"
-                  label="Width"
+                  label="Width (mm)"
                   type="number"
                 />
                 <Input
@@ -323,7 +323,7 @@ export default function ArticleForm({
                   required
                   register={register}
                   id="blindsHeight"
-                  label="Height"
+                  label="Height (mm)"
                   type="number"
                 />
               </>
@@ -369,7 +369,7 @@ export default function ArticleForm({
                   required
                   register={register}
                   id="extrasWidth"
-                  label="Width"
+                  label="Width (mm)"
                   type="number"
                 />
                 <Input
@@ -378,7 +378,7 @@ export default function ArticleForm({
                   required
                   register={register}
                   id="extrasHeight"
-                  label="Height"
+                  label="Height (mm)"
                   type="number"
                 />
               </>
@@ -394,7 +394,7 @@ export default function ArticleForm({
               required
               register={register}
               id="price"
-              label="Price"
+              label="Price €"
               type="number"
             />
             <Input
